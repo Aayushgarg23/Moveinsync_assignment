@@ -11,6 +11,7 @@ import { VisitorService } from '../../services/visitor.service';
 import { Visitor, Host } from '../../models/visitor.model';
 import { forkJoin, map } from 'rxjs';
 import { GuestDetailDialogComponent } from '../guest-detail-dialog/guest-detail-dialog.component';
+import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +24,8 @@ import { GuestDetailDialogComponent } from '../guest-detail-dialog/guest-detail-
     MatIconModule,
     MatTableModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    VisitorStatusPipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'

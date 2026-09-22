@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Visitor, Host } from '../../models/visitor.model';
 import { VisitorService } from '../../services/visitor.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
 
 export interface GuestDetailData {
   visitor: Visitor & { host?: Host };
@@ -20,7 +21,8 @@ export interface GuestDetailData {
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    VisitorStatusPipe
   ],
   templateUrl: './guest-detail-dialog.component.html',
   styleUrl: './guest-detail-dialog.component.scss'
