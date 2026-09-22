@@ -14,7 +14,8 @@ export type VisitorStatus =
   | 'SELF_CHECK_OUT'
   | 'OVERSTAY'
   | 'DENIED'
-  | 'EXPIRED';
+  | 'EXPIRED'
+  | 'CANCELLED';
 
 export type RegistrationPath = 'pre-invited' | 'walk-in';
 

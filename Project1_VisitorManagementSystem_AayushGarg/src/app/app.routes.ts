@@ -21,5 +21,10 @@ export const routes: Routes = [
     path: 'approvals',
     loadComponent: () =>
       import('./components/approvals/approvals.component').then(m => m.ApprovalsComponent)
+  },
+  {
+    path: 'pre-approvals',
+    loadComponent: () =>
+      import('./components/pre-approvals/pre-approvals.component').then(m => m.PreApprovalsComponent)
   }
 ];
