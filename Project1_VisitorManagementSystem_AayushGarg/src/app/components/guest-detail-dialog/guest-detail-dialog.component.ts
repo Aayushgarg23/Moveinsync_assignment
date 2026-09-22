@@ -73,4 +73,18 @@ export class GuestDetailDialogComponent {
       this.dialogRef.close(true);
     });
   }
+
+  getStatusClass(status: string): string {
+    switch(status) {
+      case 'OVERSTAY': return 'bg-red-50 text-red-700 border border-red-200 font-medium';
+      case 'CHECKED_IN': return 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium';
+      case 'PENDING_APPROVAL': return 'bg-amber-50 text-amber-700 border border-amber-200 font-medium';
+      case 'PRE_APPROVED': return 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-medium';
+      case 'DENIED': return 'bg-rose-50 text-rose-700 border border-rose-200 font-medium';
+      case 'CHECKED_OUT': return 'bg-gray-50 text-gray-700 border border-gray-200 font-medium';
+      case 'SELF_CHECK_OUT': return 'bg-gray-100 text-gray-700 border border-gray-300 font-medium';
+      case 'EXPIRED': return 'bg-slate-50 text-slate-700 border border-slate-200 font-medium';
+      default: return 'bg-gray-50 text-gray-700 border border-gray-200 font-medium';
+    }
+  }
 }

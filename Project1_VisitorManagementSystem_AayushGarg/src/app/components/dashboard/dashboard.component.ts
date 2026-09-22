@@ -163,15 +163,28 @@ export class DashboardComponent implements OnInit {
 
   getStatusClass(status: string): string {
     switch(status) {
-      case 'OVERSTAY': return 'bg-red-100 text-red-700 font-bold';
-      case 'SELF_CHECK_OUT': return 'bg-gray-200 text-gray-700';
-      case 'CHECKED_OUT': return 'bg-gray-100 text-gray-600';
-      case 'CHECKED_IN': return 'bg-green-100 text-green-800';
-      case 'PRE_APPROVED': return 'bg-blue-100 text-blue-800';
-      case 'PENDING_APPROVAL': return 'bg-yellow-100 text-yellow-800';
-      case 'DENIED': return 'bg-red-100 text-red-800';
-      case 'EXPIRED': return 'bg-gray-300 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'OVERSTAY': return 'bg-red-50 text-red-700 border border-red-200 font-medium';
+      case 'CHECKED_IN': return 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium';
+      case 'PENDING_APPROVAL': return 'bg-amber-50 text-amber-700 border border-amber-200 font-medium';
+      case 'PRE_APPROVED': return 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-medium';
+      case 'DENIED': return 'bg-rose-50 text-rose-700 border border-rose-200 font-medium';
+      case 'CHECKED_OUT': return 'bg-gray-50 text-gray-700 border border-gray-200 font-medium';
+      case 'SELF_CHECK_OUT': return 'bg-gray-100 text-gray-700 border border-gray-300 font-medium';
+      case 'EXPIRED': return 'bg-slate-50 text-slate-700 border border-slate-200 font-medium';
+      default: return 'bg-gray-50 text-gray-700 border border-gray-200 font-medium';
     }
+  }
+
+  getAvatarClass(name: string): string {
+    if (!name) return 'bg-gray-100 text-gray-700';
+    const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const colors = [
+      'bg-indigo-100 text-indigo-700',
+      'bg-emerald-100 text-emerald-700',
+      'bg-amber-100 text-amber-700',
+      'bg-rose-100 text-rose-700',
+      'bg-blue-100 text-blue-700'
+    ];
+    return colors[hash % colors.length];
   }
 }
