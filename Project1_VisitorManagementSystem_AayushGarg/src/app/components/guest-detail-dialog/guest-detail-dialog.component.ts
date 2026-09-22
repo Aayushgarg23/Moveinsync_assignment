@@ -11,6 +11,8 @@ import { Visitor, Host } from '../../models/visitor.model';
 import { VisitorService } from '../../services/visitor.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
+import { ErrorSnackbarService } from '../../services/error-snackbar.service';
+import { catchError, finalize } from 'rxjs';
 
 export interface GuestDetailData {
   visitor: Visitor & { host?: Host };
@@ -40,6 +42,7 @@ export class GuestDetailDialogComponent {
 
   private visitorService = inject(VisitorService);
   private snackBar = inject(MatSnackBar);
+  private errorService = inject(ErrorSnackbarService);
 
   constructor(
     public dialogRef: MatDialogRef<GuestDetailDialogComponent>,
@@ -51,8 +54,10 @@ export class GuestDetailDialogComponent {
 
   simulateCheckIn() {
     this.isProcessing.set(true);
-    this.visitorService.updateVisitorStatus$(this.visitor.id, 'CHECKED_IN').subscribe(() => {
-      this.isProcessing.set(false);
+    this.visitorService.updateVisitorStatus$(this.visitor.id, 'CHECKED_IN').pipe(
+      catchError(this.errorService.handleError('Failed to check in visitor.')),
+      finalize(() => this.isProcessing.set(false))
+    ).subscribe(() => {
       this.snackBar.open('Visitor checked in successfully', 'OK', { duration: 3000 });
       this.dialogRef.close(true);
     });
@@ -60,8 +65,10 @@ export class GuestDetailDialogComponent {
 
   checkOut() {
     this.isProcessing.set(true);
-    this.visitorService.updateVisitorStatus$(this.visitor.id, 'CHECKED_OUT').subscribe(() => {
-      this.isProcessing.set(false);
+    this.visitorService.updateVisitorStatus$(this.visitor.id, 'CHECKED_OUT').pipe(
+      catchError(this.errorService.handleError('Failed to check out visitor.')),
+      finalize(() => this.isProcessing.set(false))
+    ).subscribe(() => {
       this.snackBar.open('Visitor checked out successfully', 'OK', { duration: 3000 });
       this.dialogRef.close(true);
     });

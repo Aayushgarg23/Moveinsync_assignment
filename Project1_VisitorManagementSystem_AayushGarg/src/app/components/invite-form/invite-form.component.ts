@@ -16,8 +16,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { VisitorService } from '../../services/visitor.service';
 import { VisitType } from '../../models/visitor.model';
-import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, switchMap, catchError, of, finalize } from 'rxjs';
 import { QrDialogComponent } from '../qr-dialog/qr-dialog.component';
+import { ErrorSnackbarService } from '../../services/error-snackbar.service';
 
 interface GuestEntry {
   id: string;
@@ -56,6 +57,8 @@ export class InviteFormComponent {
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
 
+  private errorService = inject(ErrorSnackbarService);
+
   isSubmitting = signal(false);
 
   visitTypes: VisitType[] = [
@@ -88,7 +91,12 @@ export class InviteFormComponent {
       distinctUntilChanged(),
       switchMap(query => {
         this.isSearching.set(true);
-        return this.visitorService.searchContacts$(query);
+        return this.visitorService.searchContacts$(query).pipe(
+          catchError(() => {
+            this.errorService.showError('Search failed to load.');
+            return of([]);
+          })
+        );
       })
     ).subscribe(results => {
       const addedIds = new Set(this.addedGuests().map(g => g.id));
@@ -121,7 +129,7 @@ export class InviteFormComponent {
     }
 
     if (this.addedGuests().length === 0) {
-      this.snackBar.open('Please add at least one guest', 'OK', { duration: 3000 });
+      this.errorService.showError('Please add at least one guest');
       return;
     }
 
@@ -132,7 +140,7 @@ export class InviteFormComponent {
     // Check max 5 pre-approvals limit
     const currentPreApprovals = this.visitorService.getPreApprovalCountForHost(hostId, formValue.date);
     if (currentPreApprovals + guests.length > 5) {
-      this.snackBar.open(`Limit exceeded: Host can only have 5 pre-approvals per day. They currently have ${currentPreApprovals}.`, 'Close', { duration: 5000 });
+      this.errorService.showError('Daily pre-approval limit reached (5/day) for this host.');
       return;
     }
 
@@ -167,7 +175,12 @@ export class InviteFormComponent {
         tempCardNo: '',
         additionalInfo: formValue.personalNote || '',
         sponsorLOS: ''
-      }).subscribe(visitor => {
+      }).pipe(
+        catchError(this.errorService.handleError(`Failed to add visitor ${guest.name}.`)),
+        finalize(() => {
+          if (completed + 1 === total) this.isSubmitting.set(false);
+        })
+      ).subscribe(visitor => {
         // Also create an approval request for record if needed, but per brief: "no wait"
         // Let's just create pre-approval record/pass
         this.visitorService.addPreApproval$({
@@ -178,7 +191,9 @@ export class InviteFormComponent {
           endTime: endTime,
           qrCode: `QR-${visitor.id}`,
           isExpired: false
-        }).subscribe(() => {
+        }).pipe(
+          catchError(this.errorService.handleError(`Failed to create pre-approval pass for ${guest.name}.`))
+        ).subscribe(() => {
           completed++;
           
           // Open dialog with QR code for the last/only guest as immediate e-pass

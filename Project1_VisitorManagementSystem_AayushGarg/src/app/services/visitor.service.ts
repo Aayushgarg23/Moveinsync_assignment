@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { of, delay, Observable, map, tap } from 'rxjs';
+import { of, delay, Observable, map, tap, switchMap, throwError } from 'rxjs';
 import {
   Visitor,
   Host,
@@ -205,39 +205,53 @@ export class VisitorService {
 
   // ── Simulated async fetchers (RxJS) ─────────────────────────────────
 
+  /** Random failure simulator (10% chance) */
+  private withRandomError<T>() {
+    return (source: Observable<T>): Observable<T> => source.pipe(
+      delay(800),
+      switchMap((data: T) => {
+        // 1-in-10 chance of failing
+        if (Math.random() < 0.1) {
+          return throwError(() => new Error('Simulated network error: Database timeout.'));
+        }
+        return of(data);
+      })
+    );
+  }
+
   /** Simulate fetching all visitors from an API */
   getVisitors$(): Observable<Visitor[]> {
-    return of([...this.visitors]).pipe(delay(800));
+    return of([...this.visitors]).pipe(this.withRandomError());
   }
 
   /** Simulate fetching all hosts from an API */
   getHosts$(): Observable<Host[]> {
-    return of([...this.hosts]).pipe(delay(800));
+    return of([...this.hosts]).pipe(this.withRandomError());
   }
 
   /** Simulate fetching pending approval requests for a host */
   getApprovalRequestsByHost$(hostId: string): Observable<ApprovalRequest[]> {
-    return of(this.approvalRequests.filter(ar => ar.hostId === hostId)).pipe(delay(800));
+    return of(this.approvalRequests.filter(ar => ar.hostId === hostId)).pipe(this.withRandomError());
   }
 
   /** Simulate fetching all approval requests */
   getApprovalRequests$(): Observable<ApprovalRequest[]> {
-    return of([...this.approvalRequests]).pipe(delay(800));
+    return of([...this.approvalRequests]).pipe(this.withRandomError());
   }
 
   /** Simulate fetching pre-approvals for a host */
   getPreApprovalsByHost$(hostId: string): Observable<PreApproval[]> {
-    return of(this.preApprovals.filter(pa => pa.hostId === hostId)).pipe(delay(800));
+    return of(this.preApprovals.filter(pa => pa.hostId === hostId)).pipe(this.withRandomError());
   }
 
   /** Simulate fetching a single visitor by ID */
   getVisitorById$(id: string): Observable<Visitor | undefined> {
-    return of(this.visitors.find(v => v.id === id)).pipe(delay(800));
+    return of(this.visitors.find(v => v.id === id)).pipe(this.withRandomError());
   }
 
   /** Simulate fetching a single host by ID */
   getHostById$(id: string): Observable<Host | undefined> {
-    return of(this.hosts.find(h => h.id === id)).pipe(delay(800));
+    return of(this.hosts.find(h => h.id === id)).pipe(this.withRandomError());
   }
 
   // ── Signal bridges (consumed by components via toSignal()) ──────────
@@ -264,7 +278,7 @@ export class VisitorService {
       id: `v${this.nextVisitorId++}`
     };
     this.visitors.push(newVisitor);
-    return of(newVisitor).pipe(delay(800));
+    return of(newVisitor).pipe(this.withRandomError());
   }
 
   addApprovalRequest$(request: Omit<ApprovalRequest, 'id' | 'createdAt'>): Observable<ApprovalRequest> {
@@ -274,7 +288,7 @@ export class VisitorService {
       createdAt: new Date()
     };
     this.approvalRequests.push(newRequest);
-    return of(newRequest).pipe(delay(800));
+    return of(newRequest).pipe(this.withRandomError());
   }
 
   updateApprovalStatus$(requestId: string, status: 'APPROVED' | 'REJECTED'): Observable<ApprovalRequest | undefined> {
@@ -290,7 +304,7 @@ export class VisitorService {
         }
       }
     }
-    return of(request).pipe(delay(800));
+    return of(request).pipe(this.withRandomError());
   }
 
   addPreApproval$(preApproval: Omit<PreApproval, 'id' | 'createdAt'>): Observable<PreApproval> {
@@ -300,7 +314,7 @@ export class VisitorService {
       createdAt: new Date()
     };
     this.preApprovals.push(newPreApproval);
-    return of(newPreApproval).pipe(delay(800));
+    return of(newPreApproval).pipe(this.withRandomError());
   }
 
   updateVisitorStatus$(visitorId: string, status: VisitorStatus): Observable<Visitor | undefined> {
@@ -314,7 +328,7 @@ export class VisitorService {
         visitor.checkOutTime = new Date();
       }
     }
-    return of(visitor).pipe(delay(800));
+    return of(visitor).pipe(this.withRandomError());
   }
 
   /** Count pre-approvals for a host today (enforces max-5 limit) */
@@ -326,7 +340,7 @@ export class VisitorService {
         pa.hostId === hostId &&
         new Date(pa.createdAt).getTime() >= today.getTime()
     ).length;
-    return of(count).pipe(delay(800));
+    return of(count).pipe(this.withRandomError());
   }
   /** Search visitors + hosts by name/email/phone/id for guest-add in invite form */
   searchContacts$(query: string): Observable<Array<{ id: string; name: string; email: string; phone: string; type: 'visitor' | 'host' }>> {

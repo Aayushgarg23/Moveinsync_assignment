@@ -12,9 +12,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { VisitorService } from '../../services/visitor.service';
 import { Visitor, Host } from '../../models/visitor.model';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, catchError } from 'rxjs';
 import { GuestDetailDialogComponent } from '../guest-detail-dialog/guest-detail-dialog.component';
 import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
+import { ErrorSnackbarService } from '../../services/error-snackbar.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,6 +40,7 @@ import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
 export class DashboardComponent implements OnInit {
   private visitorService = inject(VisitorService);
   private dialog = inject(MatDialog);
+  private errorService = inject(ErrorSnackbarService);
 
   // Core data signals
   allVisitors = signal<(Visitor & { host?: Host })[]>([]);
@@ -125,6 +127,7 @@ export class DashboardComponent implements OnInit {
       visitors: this.visitorService.getVisitors$(),
       hosts: this.visitorService.getHosts$()
     }).pipe(
+      catchError(this.errorService.handleError('Failed to load dashboard data.')),
       map(({ visitors, hosts }) => {
         return visitors.map(v => ({
           ...v,
