@@ -324,4 +324,29 @@ export class VisitorService {
     ).length;
     return of(count).pipe(delay(800));
   }
+  /** Search visitors + hosts by name/email/phone/id for guest-add in invite form */
+  searchContacts$(query: string): Observable<Array<{ id: string; name: string; email: string; phone: string; type: 'visitor' | 'host' }>> {
+    const q = query.toLowerCase().trim();
+    if (!q) return of([]);
+
+    const matchedVisitors = this.visitors
+      .filter(v =>
+        v.name.toLowerCase().includes(q) ||
+        v.email.toLowerCase().includes(q) ||
+        v.phone.includes(q) ||
+        v.id.toLowerCase().includes(q)
+      )
+      .map(v => ({ id: v.id, name: v.name, email: v.email, phone: v.phone, type: 'visitor' as const }));
+
+    const matchedHosts = this.hosts
+      .filter(h =>
+        h.name.toLowerCase().includes(q) ||
+        h.email.toLowerCase().includes(q) ||
+        h.phone.includes(q) ||
+        h.id.toLowerCase().includes(q)
+      )
+      .map(h => ({ id: h.id, name: h.name, email: h.email, phone: h.phone, type: 'host' as const }));
+
+    return of([...matchedVisitors, ...matchedHosts]).pipe(delay(400));
+  }
 }

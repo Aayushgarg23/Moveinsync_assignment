@@ -1,0 +1,149 @@
+<div class="max-w-3xl mx-auto">
+  <h2 class="text-2xl font-semibold mb-1">Invite Visitor</h2>
+  <p class="text-gray-500 mb-6">Pre-invite guests — they'll need host approval before check-in</p>
+
+  <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+    <!-- Event Title -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Event Title</mat-label>
+      <input matInput formControlName="eventTitle" placeholder="e.g. Quarterly Review Meeting">
+      @if (inviteForm.get('eventTitle')?.hasError('required') && inviteForm.get('eventTitle')?.touched) {
+        <mat-error>Event title is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Type of Visit + Office — side by side -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Type of Visit</mat-label>
+        <mat-select formControlName="visitType">
+          @for (type of visitTypes; track type) {
+            <mat-option [value]="type">{{ type }}</mat-option>
+          }
+        </mat-select>
+        @if (inviteForm.get('visitType')?.hasError('required') && inviteForm.get('visitType')?.touched) {
+          <mat-error>Visit type is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Office</mat-label>
+        <mat-select formControlName="office">
+          @for (office of offices; track office) {
+            <mat-option [value]="office">{{ office }}</mat-option>
+          }
+        </mat-select>
+        @if (inviteForm.get('office')?.hasError('required') && inviteForm.get('office')?.touched) {
+          <mat-error>Office is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Date + Start/End Time -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (inviteForm.get('date')?.hasError('required') && inviteForm.get('date')?.touched) {
+          <mat-error>Date is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Start Time</mat-label>
+        <input matInput type="time" formControlName="startTime">
+        @if (inviteForm.get('startTime')?.hasError('required') && inviteForm.get('startTime')?.touched) {
+          <mat-error>Start time is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>End Time</mat-label>
+        <input matInput type="time" formControlName="endTime">
+        @if (inviteForm.get('endTime')?.hasError('required') && inviteForm.get('endTime')?.touched) {
+          <mat-error>End time is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Guest Search + Add -->
+    <div class="border border-gray-300 rounded-lg p-4">
+      <label class="text-sm font-medium text-gray-700 mb-2 block">Add Guests</label>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Search by name, email, phone, or ID</mat-label>
+        <input matInput [value]="searchQuery()" (input)="onSearchInput($event)"
+               placeholder="Type to search...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Search Results Dropdown -->
+      @if (isSearching()) {
+        <div class="flex items-center gap-2 text-gray-500 text-sm mb-2">
+          <mat-spinner diameter="16"></mat-spinner>
+          <span>Searching...</span>
+        </div>
+      }
+
+      @if (searchResults().length > 0) {
+        <div class="border border-gray-200 rounded-md mb-3 max-h-48 overflow-y-auto">
+          @for (result of searchResults(); track result.id) {
+            <div class="flex items-center justify-between px-3 py-2 hover:bg-gray-50 cursor-pointer"
+                 (click)="addGuest(result)">
+              <div>
+                <span class="font-medium">{{ result.name }}</span>
+                <span class="text-gray-400 text-sm ml-2">{{ result.email }}</span>
+              </div>
+              <mat-icon class="text-green-600" fontIcon="add_circle_outline"></mat-icon>
+            </div>
+            <mat-divider></mat-divider>
+          }
+        </div>
+      }
+
+      @if (searchQuery().length > 0 && searchResults().length === 0 && !isSearching()) {
+        <p class="text-sm text-gray-400 mb-3">No results found</p>
+      }
+
+      <!-- Added Guests List -->
+      @if (addedGuests().length > 0) {
+        <div class="mt-2">
+          <label class="text-xs text-gray-500 uppercase tracking-wide mb-1 block">
+            Added Guests ({{ addedGuests().length }})
+          </label>
+          @for (guest of addedGuests(); track guest.id) {
+            <div class="flex items-center justify-between bg-indigo-50 rounded-md px-3 py-2 mb-1">
+              <div>
+                <span class="font-medium text-indigo-900">{{ guest.name }}</span>
+                <span class="text-indigo-400 text-sm ml-2">{{ guest.email }}</span>
+              </div>
+              <button mat-icon-button color="warn" (click)="removeGuest(guest.id)" type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Personal Note -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Personal Note (optional)</mat-label>
+      <textarea matInput formControlName="personalNote" rows="3"
+                placeholder="Any special instructions for the host..."></textarea>
+    </mat-form-field>
+
+    <!-- Submit -->
+    <div class="flex justify-end">
+      <button mat-raised-button color="primary" type="submit"
+              [disabled]="isSubmitting()" class="px-8 py-2">
+        <mat-spinner diameter="20" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
+        <span>{{ isSubmitting() ? 'Sending...' : 'Send Invitation' }}</span>
+      </button>
+    </div>
+
+  </form>
+</div>
