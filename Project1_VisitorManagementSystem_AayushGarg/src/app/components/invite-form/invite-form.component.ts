@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 import { VisitorService } from '../../services/visitor.service';
 import { VisitType } from '../../models/visitor.model';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
@@ -40,7 +41,8 @@ interface GuestEntry {
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatListModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCardModule
   ],
   templateUrl: './invite-form.component.html',
   styleUrl: './invite-form.component.scss'

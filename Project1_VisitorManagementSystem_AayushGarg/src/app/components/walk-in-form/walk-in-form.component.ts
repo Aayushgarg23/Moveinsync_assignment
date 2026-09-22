@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { VisitorService } from '../../services/visitor.service';
 import { Host, VisitType } from '../../models/visitor.model';
 import { PhotoCaptureComponent } from '../photo-capture/photo-capture.component';
@@ -25,6 +26,7 @@ import { PhotoCaptureComponent } from '../photo-capture/photo-capture.component'
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatCardModule,
     PhotoCaptureComponent
   ],
   templateUrl: './walk-in-form.component.html',

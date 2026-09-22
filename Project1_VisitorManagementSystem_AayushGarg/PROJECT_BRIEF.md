@@ -27,14 +27,28 @@ TypeScript interfaces: Visitor, Host, ApprovalRequest, PreApproval.
 Signals-based VisitorService with mock hosts + mock visitors, simulated API delay.
 
 ### 2. Visitor Registration — TWO paths into the same visitor list
-a) Pre-invited: host fills Invite form in advance (fields: Event Title, Types of Visit
-   dropdown [Business Guests/Vendor/Personnel/Govt Officials/Interview/Others], Office,
-   Date, start/end time, guest search+add by name/id/email/phone, added guests list with
-   remove, optional personal note) — goes to pending-approval status
-b) Walk-in/self-check-in: guard/kiosk registers an unscheduled visitor on the spot
-   (name, contact, purpose, host name+department, company/org name, mandatory photo
-   upload) — approved on the spot at the desk, no host-approval wait
-Both paths auto-log check-in time and feed the same visitor list.
+### Path A: Invite / Pre-Approval (same feature — the "Invite Visitor" screenshot)
+Host fills Invite form (Event Title, Type of Visit, Office, Date, Start/End
+Time window, guest search+add, personal note). On "Confirm Invite":
+- Generate QR/e-pass IMMEDIATELY (host scheduling = host approving, no wait)
+- Status: "pre-approved"
+- If visitor doesn't check in within the date/time window → auto-expire
+  (status: "expired")
+- Enforce max 5 pre-approvals per host per day
+On arrival within window: front desk searches/scans QR → check-in directly,
+no approval step.
+
+### Path B: Walk-in (unscheduled, on-arrival)
+Guard/kiosk registers visitor on the spot (name, contact, purpose, host,
+company, mandatory photo via webcam). On submit:
+- Status: "pending-approval" (NOT auto-checked-in)
+- Host gets real-time notification (toast)
+- Feeds into Approval Workflow queue
+
+### Approval Workflow (applies to Walk-in path only)
+Host-facing pending queue, approve/reject buttons.
+- Approve → QR badge generated, status "checked-in"
+- Reject → status "denied", "security notified" toast
 
 ### 3. Front Desk Dashboard
 Visitor count header ("All (N)"), search by name/email/phone, date+time range filter
@@ -45,10 +59,11 @@ photo avatars for visitor+host, contact, check-in/out timestamps, Other Details
 (Company Name, Role, Sponsor LOS, Temp Card No), Additional Information free-text,
 Check-Out button.
 
-### 4. Approval Workflow
-Host-facing pending list, approve/reject buttons, real-time-style toast notification
-on new request. Approve → QR badge generated (angularx-qrcode). Reject → visitor
-denied + "security notified" toast.
+
+### Approval Workflow (applies to Walk-in path only)
+Host-facing pending queue, approve/reject buttons.
+- Approve → QR badge generated, status "checked-in"
+- Reject → status "denied", "security notified" toast
 
 ### 5. Pre-Approval
 Schedule form: date + time window. On confirm → QR/e-pass generated immediately.
@@ -68,3 +83,18 @@ channel, mobile app approval flow, exact pixel-matching of screenshots.
 - Public GitHub repo (verify visibility before submitting)
 - Demo video following exact flow: register (both paths) → approve → pre-approve
   → check-in/out → overstay
+
+
+
+  ## App Shell & Navigation (build this BEFORE continuing other modules)
+- AppShellComponent: mat-sidenav-container with mat-toolbar header
+- Sidebar nav items: Dashboard, Invite Visitor, Walk-in Check-in, Approvals,
+  Pre-Approvals (Material icons, routerLinkActive highlighting)
+- Responsive: sidenav mode="side" fixed on desktop (>=768px), mode="over"
+  toggled by hamburger on mobile (<768px)
+- All existing and future module routes render inside this shell via
+  router-outlet, NOT as standalone pages
+- Wrap module content in mat-card for visual structure; consistent Tailwind
+  spacing scale throughout
+- Dashboard table: wrap in overflow-x-auto for mobile scroll (card-based
+  mobile redesign is optional polish, only if time remains at the end)

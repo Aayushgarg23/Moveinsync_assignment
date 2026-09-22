@@ -1,0 +1,15 @@
+/* AppShell styles */
+mat-sidenav {
+  /* Override material defaults for dark sidebar */
+  background-color: rgb(15 23 42) !important; /* Tailwind slate-900 */
+}
+
+/* Ensure list items inside sidenav use standard mat-list styles but allow our Tailwind classes */
+.mat-mdc-list-item {
+  color: inherit !important;
+}
+
+.mat-mdc-list-item.bg-slate-700 {
+  background-color: rgb(51 65 85) !important;
+  color: white !important;
+}

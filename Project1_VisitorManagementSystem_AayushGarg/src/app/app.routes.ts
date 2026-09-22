@@ -1,7 +1,12 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'register/invite', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  },
   {
     path: 'register/invite',
     loadComponent: () =>
@@ -11,5 +16,10 @@ export const routes: Routes = [
     path: 'register/walk-in',
     loadComponent: () =>
       import('./components/walk-in-form/walk-in-form.component').then(m => m.WalkInFormComponent)
+  },
+  {
+    path: 'approvals',
+    loadComponent: () =>
+      import('./components/approvals/approvals.component').then(m => m.ApprovalsComponent)
   }
 ];

@@ -1,108 +1,114 @@
 <div class="max-w-3xl mx-auto">
-  <h2 class="text-2xl font-semibold mb-1">Walk-in / Self Check-in</h2>
-  <p class="text-gray-500 mb-6">Register an unscheduled visitor — approved on the spot, no host approval needed</p>
+  <mat-card>
+    <mat-card-header class="mb-4">
+      <mat-card-title class="text-2xl font-semibold mb-1">Walk-in / Self Check-in</mat-card-title>
+      <mat-card-subtitle class="text-gray-500">Register an unscheduled visitor — approved on the spot, no host approval needed</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content class="p-6">
+      <form [formGroup]="walkInForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
-  <form [formGroup]="walkInForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
-
-    <!-- Full Name -->
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Full Name</mat-label>
-      <input matInput formControlName="fullName" placeholder="Visitor's full name">
-      @if (walkInForm.get('fullName')?.hasError('required') && walkInForm.get('fullName')?.touched) {
-        <mat-error>Full name is required</mat-error>
-      }
-    </mat-form-field>
-
-    <!-- Contact: Email + Phone side by side -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="visitor@company.com">
-        @if (walkInForm.get('email')?.hasError('email') && walkInForm.get('email')?.touched) {
-          <mat-error>Enter a valid email</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Mobile Number</mat-label>
-        <input matInput formControlName="phone" placeholder="10-digit mobile number">
-        @if (walkInForm.get('phone')?.hasError('pattern') && walkInForm.get('phone')?.touched) {
-          <mat-error>Enter a valid 10-digit Indian mobile number</mat-error>
-        }
-      </mat-form-field>
-    </div>
-
-    <!-- At least one contact error -->
-    @if (walkInForm.hasError('atLeastOneContact') && walkInForm.touched) {
-      <p class="text-red-500 text-sm -mt-3">At least one contact (email or phone) is required</p>
-    }
-
-    <!-- Purpose of Visit -->
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Purpose of Visit</mat-label>
-      <input matInput formControlName="purpose" placeholder="e.g. Delivery, Meeting, Maintenance">
-      @if (walkInForm.get('purpose')?.hasError('required') && walkInForm.get('purpose')?.touched) {
-        <mat-error>Purpose is required</mat-error>
-      }
-    </mat-form-field>
-
-    <!-- Host + Visit Type side by side -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
+        <!-- Full Name -->
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Host</mat-label>
-          <mat-select formControlName="hostId" (selectionChange)="onHostChange($event.value)">
-            @for (host of hosts(); track host.id) {
-              <mat-option [value]="host.id">{{ host.name }}</mat-option>
-            }
-          </mat-select>
-          @if (walkInForm.get('hostId')?.hasError('required') && walkInForm.get('hostId')?.touched) {
-            <mat-error>Host is required</mat-error>
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" placeholder="Visitor's full name">
+          @if (walkInForm.get('fullName')?.hasError('required') && walkInForm.get('fullName')?.touched) {
+            <mat-error>Full name is required</mat-error>
           }
         </mat-form-field>
-        @if (selectedHostDepartment()) {
-          <p class="text-sm text-indigo-600 -mt-3 ml-1">
-            <mat-icon class="text-sm align-middle mr-1" style="font-size: 16px; height: 16px; width: 16px;">business</mat-icon>
-            Department: {{ selectedHostDepartment() }}
-          </p>
+
+        <!-- Contact: Email + Phone side by side -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="visitor@company.com">
+            @if (walkInForm.get('email')?.hasError('email') && walkInForm.get('email')?.touched) {
+              <mat-error>Enter a valid email</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="phone" placeholder="10-digit mobile number">
+            @if (walkInForm.get('phone')?.hasError('pattern') && walkInForm.get('phone')?.touched) {
+              <mat-error>Enter a valid 10-digit Indian mobile number</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- At least one contact error -->
+        @if (walkInForm.hasError('atLeastOneContact') && walkInForm.touched) {
+          <p class="text-red-500 text-sm -mt-2 mb-2">At least one contact (email or phone) is required</p>
         }
-      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Type of Visit</mat-label>
-        <mat-select formControlName="visitType">
-          @for (type of visitTypes; track type) {
-            <mat-option [value]="type">{{ type }}</mat-option>
+        <!-- Purpose of Visit -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Purpose of Visit</mat-label>
+          <input matInput formControlName="purpose" placeholder="e.g. Delivery, Meeting, Maintenance">
+          @if (walkInForm.get('purpose')?.hasError('required') && walkInForm.get('purpose')?.touched) {
+            <mat-error>Purpose is required</mat-error>
           }
-        </mat-select>
-      </mat-form-field>
-    </div>
+        </mat-form-field>
 
-    <!-- Company / Organization Name -->
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Company / Organization Name</mat-label>
-      <input matInput formControlName="companyName" placeholder="Visitor's company or organization">
-      @if (walkInForm.get('companyName')?.hasError('required') && walkInForm.get('companyName')?.touched) {
-        <mat-error>Company name is required</mat-error>
-      }
-    </mat-form-field>
+        <!-- Host + Visit Type side by side -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Host</mat-label>
+              <mat-select formControlName="hostId" (selectionChange)="onHostChange($event.value)">
+                @for (host of hosts(); track host.id) {
+                  <mat-option [value]="host.id">{{ host.name }}</mat-option>
+                }
+              </mat-select>
+              @if (walkInForm.get('hostId')?.hasError('required') && walkInForm.get('hostId')?.touched) {
+                <mat-error>Host is required</mat-error>
+              }
+            </mat-form-field>
+            @if (selectedHostDepartment()) {
+              <p class="text-sm text-indigo-600 -mt-2 ml-1">
+                <mat-icon class="text-sm align-middle mr-1" style="font-size: 16px; height: 16px; width: 16px;">business</mat-icon>
+                Department: {{ selectedHostDepartment() }}
+              </p>
+            }
+          </div>
 
-    <!-- Photo Capture -->
-    <div class="border border-gray-300 rounded-lg p-4">
-      <label class="text-sm font-medium text-gray-700 mb-3 block">
-        Photo Capture <span class="text-red-500">*</span>
-      </label>
-      <app-photo-capture (photoCaptured)="onPhotoCaptured($event)"></app-photo-capture>
-    </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Type of Visit</mat-label>
+            <mat-select formControlName="visitType">
+              @for (type of visitTypes; track type) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-    <!-- Submit -->
-    <div class="flex justify-end">
-      <button mat-raised-button color="primary" type="submit"
-              [disabled]="isSubmitting()" class="px-8 py-2">
-        <mat-spinner diameter="20" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
-        <span>{{ isSubmitting() ? 'Checking in...' : 'Check In Visitor' }}</span>
-      </button>
-    </div>
+        <!-- Company / Organization Name -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Company / Organization Name</mat-label>
+          <input matInput formControlName="companyName" placeholder="Visitor's company or organization">
+          @if (walkInForm.get('companyName')?.hasError('required') && walkInForm.get('companyName')?.touched) {
+            <mat-error>Company name is required</mat-error>
+          }
+        </mat-form-field>
 
-  </form>
+        <!-- Photo Capture -->
+        <div class="border border-gray-300 rounded-lg p-4">
+          <label class="text-sm font-medium text-gray-700 mb-3 block">
+            Photo Capture <span class="text-red-500">*</span>
+          </label>
+          <app-photo-capture (photoCaptured)="onPhotoCaptured($event)"></app-photo-capture>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex justify-end mt-2">
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="isSubmitting()" class="px-8 py-2">
+            <mat-spinner diameter="20" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
+            <span>{{ isSubmitting() ? 'Checking in...' : 'Check In Visitor' }}</span>
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
