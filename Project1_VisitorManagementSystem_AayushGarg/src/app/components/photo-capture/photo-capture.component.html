@@ -1,0 +1,78 @@
+<div class="flex flex-col items-center gap-4">
+
+  <!-- Idle state: show start camera button -->
+  @if (cameraMode() === 'idle') {
+    <div class="flex flex-col items-center gap-3">
+      <div class="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+        <mat-icon class="text-gray-300" style="font-size: 64px; width: 64px; height: 64px;">photo_camera</mat-icon>
+      </div>
+      <button mat-raised-button color="primary" type="button" (click)="startCamera()">
+        <mat-icon class="mr-1">videocam</mat-icon>
+        Open Camera
+      </button>
+    </div>
+  }
+
+  <!-- Camera streaming: show video + capture button -->
+  @if (cameraMode() === 'streaming') {
+    <div class="flex flex-col items-center gap-3">
+      <video #videoEl autoplay playsinline
+             class="w-64 h-48 rounded-lg border-2 border-indigo-300 object-cover bg-black">
+      </video>
+      <button mat-raised-button color="accent" type="button" (click)="captureFrame()">
+        <mat-icon class="mr-1">camera</mat-icon>
+        Capture Photo
+      </button>
+    </div>
+  }
+
+  <!-- Captured photo preview + retake -->
+  @if (cameraMode() === 'captured') {
+    <div class="flex flex-col items-center gap-3">
+      <img [src]="capturedPhoto()" alt="Captured visitor photo"
+           class="w-48 h-48 rounded-lg border-2 border-green-400 object-cover" />
+      <div class="flex gap-2">
+        <button mat-stroked-button color="warn" type="button" (click)="retake()">
+          <mat-icon class="mr-1">refresh</mat-icon>
+          Retake
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Fallback: camera denied / unavailable -->
+  @if (cameraMode() === 'fallback') {
+    <div class="flex flex-col items-center gap-3 text-center">
+      <div class="flex items-center gap-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-md">
+        <mat-icon>warning</mat-icon>
+        <span class="text-sm">{{ cameraError() }} Please upload a photo instead.</span>
+      </div>
+
+      @if (!capturedPhoto()) {
+        <label class="cursor-pointer">
+          <div class="w-48 h-48 bg-gray-100 rounded-lg flex flex-col items-center justify-center
+                      border-2 border-dashed border-gray-300 hover:border-indigo-400 transition-colors">
+            <mat-icon class="text-gray-400 mb-2" style="font-size: 40px; width: 40px; height: 40px;">cloud_upload</mat-icon>
+            <span class="text-sm text-gray-500">Click to upload</span>
+          </div>
+          <input type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+        </label>
+      } @else {
+        <img [src]="capturedPhoto()" alt="Uploaded visitor photo"
+             class="w-48 h-48 rounded-lg border-2 border-green-400 object-cover" />
+        <label class="cursor-pointer">
+          <button mat-stroked-button color="primary" type="button"
+                  (click)="fileInput.click()">
+            <mat-icon class="mr-1">cloud_upload</mat-icon>
+            Upload Different Photo
+          </button>
+          <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+        </label>
+      }
+    </div>
+  }
+
+  <!-- Hidden canvas for frame capture -->
+  <canvas #canvasEl class="hidden"></canvas>
+
+</div>
