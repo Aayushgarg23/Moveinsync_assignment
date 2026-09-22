@@ -35,14 +35,18 @@ export class PhotoCaptureComponent implements OnDestroy {
         video: { facingMode: 'user', width: 640, height: 480 }
       });
 
-      // Wait for ViewChild to be available
+      // Update state first so Angular renders the video element in the template
+      this.cameraMode.set('streaming');
+
+      // Wait a tick for the DOM to update and ViewChild to resolve
       setTimeout(() => {
         if (this.videoRef?.nativeElement) {
           this.videoRef.nativeElement.srcObject = this.stream;
           this.videoRef.nativeElement.play();
-          this.cameraMode.set('streaming');
+        } else {
+          console.error('Video element not found after state change');
         }
-      }, 100);
+      }, 0);
     } catch (err: any) {
       console.warn('Camera access failed:', err);
       this.cameraError.set(
