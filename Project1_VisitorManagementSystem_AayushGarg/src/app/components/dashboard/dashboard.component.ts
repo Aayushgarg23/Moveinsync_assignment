@@ -6,6 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { VisitorService } from '../../services/visitor.service';
 import { Visitor, Host } from '../../models/visitor.model';
@@ -24,6 +27,9 @@ import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
     MatIconModule,
     MatTableModule,
     MatDialogModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatTooltipModule,
     FormsModule,
     VisitorStatusPipe
   ],
@@ -39,6 +45,7 @@ export class DashboardComponent implements OnInit {
   
   // State
   searchQuery = signal('');
+  timeRange = signal<'all' | 'today' | 'last24' | 'week'>('all');
   selectedVisitor = signal<Visitor | null>(null);
 
   // Mapped visitors with OVERSTAY logic applied
@@ -49,7 +56,7 @@ export class DashboardComponent implements OnInit {
         const checkInTime = new Date(v.checkInTime).getTime();
         const diffHours = (now - checkInTime) / (1000 * 60 * 60);
         if (diffHours >= 8) {
-          return { ...v, status: 'OVERSTAY' as any }; // Cast to any to accommodate dynamic overstay status for UI
+          return { ...v, status: 'OVERSTAY' as any }; 
         }
       }
       return v;
@@ -59,25 +66,58 @@ export class DashboardComponent implements OnInit {
   // Filtered visitors
   filteredVisitors = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
-    const visitors = this.visitorsWithOverstay();
-    if (!query) return visitors;
+    const range = this.timeRange();
+    const now = new Date();
     
-    return visitors.filter(v => 
-      v.name.toLowerCase().includes(query) ||
-      v.email.toLowerCase().includes(query) ||
-      v.phone.includes(query)
-    );
+    let visitors = this.visitorsWithOverstay();
+    
+    // 1. Filter by Time Range
+    if (range !== 'all') {
+      visitors = visitors.filter(v => {
+        const timeToCompare = v.checkInTime || v.expectedStartTime;
+        if (!timeToCompare) return false;
+        
+        const date = new Date(timeToCompare);
+        
+        if (range === 'today') {
+          return date.toDateString() === now.toDateString();
+        } else if (range === 'last24') {
+          const diffHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+          return diffHours >= 0 && diffHours <= 24;
+        } else if (range === 'week') {
+          const diffDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+          return diffDays >= 0 && diffDays <= 7;
+        }
+        return true;
+      });
+    }
+
+    // 2. Filter by Search Query
+    if (query) {
+      visitors = visitors.filter(v => 
+        v.name.toLowerCase().includes(query) ||
+        v.email.toLowerCase().includes(query) ||
+        v.phone.includes(query)
+      );
+    }
+    
+    return visitors;
   });
 
   // Summaries
-  totalCount = computed(() => this.visitorsWithOverstay().length);
-  checkedInCount = computed(() => this.visitorsWithOverstay().filter(v => v.status === 'CHECKED_IN').length);
-  overstayCount = computed(() => this.visitorsWithOverstay().filter(v => v.status === 'OVERSTAY').length);
+  totalCount = computed(() => this.filteredVisitors().length);
+  checkedInCount = computed(() => this.filteredVisitors().filter(v => v.status === 'CHECKED_IN').length);
+  overstayCount = computed(() => this.filteredVisitors().filter(v => v.status === 'OVERSTAY').length);
 
   displayedColumns = ['name', 'visitType', 'checkInTime', 'checkOutTime', 'status'];
 
   ngOnInit() {
     this.loadData();
+  }
+
+  resetFilters() {
+    this.searchQuery.set('');
+    this.timeRange.set('all');
   }
 
   loadData() {

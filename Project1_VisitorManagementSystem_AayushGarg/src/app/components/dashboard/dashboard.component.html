@@ -1,18 +1,32 @@
 <div class="h-[calc(100vh-64px)] p-6 bg-gray-50 flex flex-col">
   
-  <div class="flex items-center justify-between mb-6 flex-shrink-0">
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 flex-shrink-0 gap-4">
     <div>
       <h1 class="text-2xl font-bold text-gray-900">Front Desk Dashboard</h1>
       <p class="text-sm text-gray-500">Monitor active visitors, overstays, and check-ins.</p>
     </div>
     
-    <div class="w-72">
-      <mat-form-field appearance="outline" class="w-full h-14 bg-white" subscriptSizing="dynamic">
+    <div class="flex items-center gap-3">
+      <mat-form-field appearance="outline" class="w-60 bg-white" subscriptSizing="dynamic">
+        <mat-icon matPrefix class="text-gray-400">schedule</mat-icon>
+        <mat-select [ngModel]="timeRange()" (ngModelChange)="timeRange.set($event)">
+          <mat-option value="all">All Time</mat-option>
+          <mat-option value="today">Today</mat-option>
+          <mat-option value="last24">Last 24 Hours</mat-option>
+          <mat-option value="week">This Week</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-64 bg-white" subscriptSizing="dynamic">
         <mat-icon matPrefix class="text-gray-400">search</mat-icon>
-        <input matInput placeholder="Search by name, email, or phone..." 
+        <input matInput placeholder="Search visitors..." 
                [ngModel]="searchQuery()" 
                (ngModelChange)="onSearchChange($event)">
       </mat-form-field>
+
+      <button mat-icon-button class="bg-white border border-gray-300" (click)="resetFilters()" matTooltip="Reset Filters">
+        <mat-icon class="text-gray-600">refresh</mat-icon>
+      </button>
     </div>
   </div>
 
