@@ -147,7 +147,9 @@ export class DashboardComponent implements OnInit {
     this.selectedVisitor.set(visitor);
     const dialogRef = this.dialog.open(GuestDetailDialogComponent, {
       data: { visitor },
-      width: '500px'
+      width: '100%',
+      maxWidth: '600px',
+      panelClass: 'responsive-dialog'
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -11,3 +11,15 @@ html, body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* Custom Responsive Overrides */
+.responsive-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+}
+
+@media (max-width: 599px) {
+  .responsive-dialog {
+    max-width: 95vw !important;
+    width: 95vw !important;
+  }
+}
