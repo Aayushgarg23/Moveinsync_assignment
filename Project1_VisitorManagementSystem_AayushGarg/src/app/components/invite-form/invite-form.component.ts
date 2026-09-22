@@ -69,6 +69,8 @@ export class InviteFormComponent {
 
   offices = ['Bangalore HQ', 'Mumbai Office', 'Delhi NCR', 'Hyderabad Tech Park'];
 
+  timeSlots: string[] = [];
+
   // ── Guest search ────────────────────────────────────────────────────
   searchQuery = signal('');
   searchResults = signal<GuestEntry[]>([]);
@@ -88,6 +90,8 @@ export class InviteFormComponent {
   });
 
   constructor() {
+    this.generateTimeSlots();
+
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -105,6 +109,18 @@ export class InviteFormComponent {
       this.searchResults.set(results.filter(r => !addedIds.has(r.id)));
       this.isSearching.set(false);
     });
+  }
+
+  private generateTimeSlots(): void {
+    const slots: string[] = [];
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const hour = h.toString().padStart(2, '0');
+        const min = m.toString().padStart(2, '0');
+        slots.push(`${hour}:${min}`);
+      }
+    }
+    this.timeSlots = slots;
   }
 
   onSearchInput(event: Event): void {
