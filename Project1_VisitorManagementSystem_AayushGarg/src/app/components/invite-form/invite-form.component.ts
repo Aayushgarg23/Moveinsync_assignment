@@ -13,9 +13,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { VisitorService } from '../../services/visitor.service';
 import { VisitType } from '../../models/visitor.model';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { QrDialogComponent } from '../qr-dialog/qr-dialog.component';
 
 interface GuestEntry {
   id: string;
@@ -42,7 +44,8 @@ interface GuestEntry {
     MatProgressSpinnerModule,
     MatListModule,
     MatDividerModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
   templateUrl: './invite-form.component.html',
   styleUrl: './invite-form.component.scss'
@@ -51,6 +54,7 @@ export class InviteFormComponent {
   private fb = inject(FormBuilder);
   private visitorService = inject(VisitorService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   isSubmitting = signal(false);
 
@@ -87,7 +91,6 @@ export class InviteFormComponent {
         return this.visitorService.searchContacts$(query);
       })
     ).subscribe(results => {
-      // Filter out already-added guests
       const addedIds = new Set(this.addedGuests().map(g => g.id));
       this.searchResults.set(results.filter(r => !addedIds.has(r.id)));
       this.isSearching.set(false);
@@ -122,23 +125,29 @@ export class InviteFormComponent {
       return;
     }
 
-    this.isSubmitting.set(true);
     const formValue = this.inviteForm.value;
     const guests = this.addedGuests();
+    const hostId = guests[0]?.type === 'host' ? guests[0].id : 'h1'; // Default host logic
+    
+    // Check max 5 pre-approvals limit
+    const currentPreApprovals = this.visitorService.getPreApprovalCountForHost(hostId, formValue.date);
+    if (currentPreApprovals + guests.length > 5) {
+      this.snackBar.open(`Limit exceeded: Host can only have 5 pre-approvals per day. They currently have ${currentPreApprovals}.`, 'Close', { duration: 5000 });
+      return;
+    }
 
-    // Create a visitor + approval request for each guest
+    this.isSubmitting.set(true);
+
     let completed = 0;
     const total = guests.length;
 
     for (const guest of guests) {
-      // Build date+time combinations
       const date: Date = formValue.date;
       const [startH, startM] = (formValue.startTime as string).split(':').map(Number);
       const [endH, endM] = (formValue.endTime as string).split(':').map(Number);
       const startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startH, startM);
       const endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), endH, endM);
 
-      // Add visitor with PENDING status
       this.visitorService.addVisitor$({
         name: guest.name,
         email: guest.email,
@@ -148,8 +157,8 @@ export class InviteFormComponent {
         photoUrl: '',
         visitType: formValue.visitType,
         purpose: formValue.eventTitle,
-        hostId: guests[0]?.type === 'host' ? guest.id : 'h1', // default host
-        status: 'PENDING',
+        hostId: hostId,
+        status: 'PRE_APPROVED', // Directly pre-approved!
         registrationPath: 'pre-invited',
         checkInTime: null,
         checkOutTime: null,
@@ -159,27 +168,33 @@ export class InviteFormComponent {
         additionalInfo: formValue.personalNote || '',
         sponsorLOS: ''
       }).subscribe(visitor => {
-        // Also create an approval request
-        this.visitorService.addApprovalRequest$({
+        // Also create an approval request for record if needed, but per brief: "no wait"
+        // Let's just create pre-approval record/pass
+        this.visitorService.addPreApproval$({
           visitorId: visitor.id,
           hostId: visitor.hostId,
-          eventTitle: formValue.eventTitle,
-          visitType: formValue.visitType,
-          office: formValue.office,
           date: date,
           startTime: startTime,
           endTime: endTime,
-          personalNote: formValue.personalNote || '',
-          status: 'PENDING'
+          qrCode: `QR-${visitor.id}`,
+          isExpired: false
         }).subscribe(() => {
           completed++;
+          
+          // Open dialog with QR code for the last/only guest as immediate e-pass
           if (completed === total) {
             this.isSubmitting.set(false);
-            this.snackBar.open(
-              `Invitation sent for ${total} guest(s) — pending host approval`,
-              'OK',
-              { duration: 4000 }
-            );
+            
+            this.dialog.open(QrDialogComponent, {
+              data: {
+                visitorName: visitor.name,
+                visitorId: visitor.id,
+                expectedStartTime: startTime,
+                expectedEndTime: endTime
+              },
+              width: '400px'
+            });
+
             this.inviteForm.reset();
             this.addedGuests.set([]);
           }

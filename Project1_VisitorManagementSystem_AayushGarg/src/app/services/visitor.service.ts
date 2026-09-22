@@ -73,7 +73,7 @@ const MOCK_VISITORS: Visitor[] = [
     visitType: 'Interview',
     purpose: 'Final round design interview',
     hostId: 'h2',
-    status: 'APPROVED',
+    status: 'PRE_APPROVED',
     registrationPath: 'pre-invited',
     checkInTime: null,
     checkOutTime: null,
@@ -136,7 +136,7 @@ const MOCK_VISITORS: Visitor[] = [
     visitType: 'Personnel',
     purpose: 'Server room maintenance',
     hostId: 'h1',
-    status: 'PENDING',
+    status: 'PENDING_APPROVAL',
     registrationPath: 'pre-invited',
     checkInTime: null,
     checkOutTime: null,
@@ -283,7 +283,10 @@ export class VisitorService {
       // Also update the visitor status
       const visitor = this.visitors.find(v => v.id === request.visitorId);
       if (visitor) {
-        visitor.status = status === 'APPROVED' ? 'APPROVED' : 'REJECTED';
+        visitor.status = status === 'APPROVED' ? 'CHECKED_IN' : 'DENIED';
+        if (status === 'APPROVED') {
+          visitor.checkInTime = new Date();
+        }
       }
     }
     return of(request).pipe(delay(800));
@@ -348,5 +351,24 @@ export class VisitorService {
       .map(h => ({ id: h.id, name: h.name, email: h.email, phone: h.phone, type: 'host' as const }));
 
     return of([...matchedVisitors, ...matchedHosts]).pipe(delay(400));
+  }
+
+  getPreApprovalCountForHost(hostId: string, date: string): number {
+    const targetDate = new Date(date).toDateString();
+    return this.visitors.filter(v => 
+      v.hostId === hostId && 
+      v.status === 'PRE_APPROVED' &&
+      v.expectedStartTime &&
+      new Date(v.expectedStartTime).toDateString() === targetDate
+    ).length;
+  }
+
+  checkAndExpirePasses(): void {
+    const now = new Date();
+    this.visitors.forEach(v => {
+      if (v.status === 'PRE_APPROVED' && v.expectedEndTime && new Date(v.expectedEndTime) < now) {
+        v.status = 'EXPIRED';
+      }
+    });
   }
 }

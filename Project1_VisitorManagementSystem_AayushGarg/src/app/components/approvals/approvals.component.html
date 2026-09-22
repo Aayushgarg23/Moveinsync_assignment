@@ -1,4 +1,85 @@
-<div class="p-6">
-  <h2 class="text-2xl font-semibold mb-4">Approvals Placeholder</h2>
-  <p class="text-gray-500">The host approval queue will go here.</p>
+<div class="max-w-6xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold mb-1">Host Approval Queue</h2>
+      <p class="text-gray-500">Walk-in visitors waiting for host approval</p>
+    </div>
+    
+    <button mat-stroked-button (click)="loadPendingRequests()">
+      <mat-icon>refresh</mat-icon> Refresh
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex justify-center p-12">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (pendingVisitors().length === 0) {
+    <div class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-12 text-center text-gray-500">
+      <mat-icon style="font-size: 48px; width: 48px; height: 48px;" class="mb-4 text-gray-400">inbox</mat-icon>
+      <p class="text-lg">No pending approvals at the moment.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (visitor of pendingVisitors(); track visitor.id) {
+        <mat-card class="overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="h-2 bg-amber-400"></div>
+          
+          <mat-card-header class="pt-4 pb-2">
+            <img mat-card-avatar [src]="visitor.photoUrl || 'assets/placeholder.png'" 
+                 class="object-cover bg-gray-100 border border-gray-200" 
+                 alt="Visitor Photo">
+            <mat-card-title class="text-lg">{{ visitor.name }}</mat-card-title>
+            <mat-card-subtitle>{{ visitor.companyName }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="pt-2 text-sm text-gray-600">
+            <div class="flex items-start gap-2 mb-2">
+              <mat-icon class="text-gray-400" style="font-size: 18px; width: 18px; height: 18px;">assignment_ind</mat-icon>
+              <div>
+                <span class="font-medium text-gray-700">Purpose:</span> 
+                {{ visitor.purpose }}
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-2 mb-2">
+              <mat-icon class="text-gray-400" style="font-size: 18px; width: 18px; height: 18px;">business_center</mat-icon>
+              <div>
+                <span class="font-medium text-gray-700">Type:</span> 
+                {{ visitor.visitType }}
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 mb-4">
+              <mat-icon class="text-gray-400" style="font-size: 18px; width: 18px; height: 18px;">person</mat-icon>
+              <div>
+                <span class="font-medium text-gray-700">Host:</span> 
+                {{ visitor.host?.name }}
+              </div>
+            </div>
+
+            <div class="bg-gray-50 p-2 rounded text-xs border border-gray-200">
+              <div *ngIf="visitor.phone">📞 {{ visitor.phone }}</div>
+              <div *ngIf="visitor.email">✉️ {{ visitor.email }}</div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions class="p-4 bg-gray-50 flex justify-end gap-2 border-t border-gray-100">
+            <button mat-stroked-button color="warn" 
+                    [disabled]="processingId() === visitor.id"
+                    (click)="reject(visitor)">
+              <mat-icon>block</mat-icon> Reject
+            </button>
+            <button mat-flat-button color="primary" class="!bg-green-600"
+                    [disabled]="processingId() === visitor.id"
+                    (click)="approve(visitor)">
+              <mat-spinner diameter="16" *ngIf="processingId() === visitor.id" class="mr-1 inline-block"></mat-spinner>
+              <mat-icon *ngIf="processingId() !== visitor.id">check_circle</mat-icon> 
+              Approve
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
 </div>

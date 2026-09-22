@@ -1,0 +1,32 @@
+<div class="p-6 flex flex-col items-center text-center">
+  <div class="w-full flex justify-end -mt-2 -mr-2">
+    <button mat-icon-button mat-dialog-close class="text-gray-500 hover:text-gray-800">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <mat-icon class="text-green-500 mb-2" style="font-size: 48px; height: 48px; width: 48px;">check_circle</mat-icon>
+  
+  <h2 class="text-2xl font-bold text-gray-800 mb-1">E-Pass Generated</h2>
+  <p class="text-gray-500 mb-6">for {{ data.visitorName }}</p>
+
+  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 inline-block mb-6">
+    <qrcode [qrdata]="qrData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+  </div>
+
+  <div class="bg-indigo-50 rounded-lg p-4 w-full text-left">
+    <h3 class="text-xs font-bold text-indigo-800 uppercase tracking-wider mb-2">Validity Window</h3>
+    <p class="text-sm text-indigo-900 mb-1">
+      <mat-icon class="align-middle text-indigo-500 mr-1" style="font-size: 16px; height: 16px; width: 16px;">calendar_today</mat-icon>
+      {{ data.expectedStartTime | date:'mediumDate' }}
+    </p>
+    <p class="text-sm text-indigo-900">
+      <mat-icon class="align-middle text-indigo-500 mr-1" style="font-size: 16px; height: 16px; width: 16px;">schedule</mat-icon>
+      {{ data.expectedStartTime | date:'shortTime' }} - {{ data.expectedEndTime | date:'shortTime' }}
+    </p>
+  </div>
+  
+  <p class="text-xs text-gray-400 mt-4 max-w-xs">
+    Scan this code at the kiosk or present it to the front desk upon arrival.
+  </p>
+</div>

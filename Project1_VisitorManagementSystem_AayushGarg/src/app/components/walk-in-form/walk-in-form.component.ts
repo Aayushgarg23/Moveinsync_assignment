@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { Router } from '@angular/router';
 import { VisitorService } from '../../services/visitor.service';
 import { Host, VisitType } from '../../models/visitor.model';
 import { PhotoCaptureComponent } from '../photo-capture/photo-capture.component';
@@ -36,6 +37,7 @@ export class WalkInFormComponent {
   private fb = inject(FormBuilder);
   private visitorService = inject(VisitorService);
   private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   isSubmitting = signal(false);
   photoDataUrl = signal<string>('');
@@ -58,13 +60,11 @@ export class WalkInFormComponent {
   }, { validators: [this.atLeastOneContactValidator] });
 
   constructor() {
-    // Load hosts
     this.visitorService.getHosts$().subscribe(hosts => {
       this.hosts.set(hosts);
     });
   }
 
-  /** Custom validator: at least email or phone must be provided */
   atLeastOneContactValidator(control: AbstractControl): ValidationErrors | null {
     const email = control.get('email')?.value;
     const phone = control.get('phone')?.value;
@@ -107,9 +107,9 @@ export class WalkInFormComponent {
       visitType: f.visitType || 'Others',
       purpose: f.purpose,
       hostId: f.hostId,
-      status: 'CHECKED_IN',
+      status: 'PENDING_APPROVAL',
       registrationPath: 'walk-in',
-      checkInTime: new Date(),
+      checkInTime: null,
       checkOutTime: null,
       expectedStartTime: null,
       expectedEndTime: null,
@@ -118,10 +118,11 @@ export class WalkInFormComponent {
       sponsorLOS: ''
     }).subscribe(() => {
       this.isSubmitting.set(false);
-      this.snackBar.open('Walk-in visitor checked in successfully!', 'OK', { duration: 4000 });
+      this.snackBar.open('Request sent to host for approval', 'OK', { duration: 4000 });
       this.walkInForm.reset({ visitType: 'Others' });
       this.photoDataUrl.set('');
       this.selectedHostDepartment.set('');
+      this.router.navigate(['/dashboard']);
     });
   }
 }

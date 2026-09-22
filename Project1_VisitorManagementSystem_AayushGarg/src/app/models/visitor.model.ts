@@ -7,14 +7,13 @@ export type VisitType =
   | 'Others';
 
 export type VisitorStatus =
-  | 'PENDING'
-  | 'APPROVED'
-  | 'REJECTED'
+  | 'PENDING_APPROVAL'
+  | 'PRE_APPROVED'
   | 'CHECKED_IN'
   | 'CHECKED_OUT'
   | 'SELF_CHECK_OUT'
   | 'OVERSTAY'
-  | 'PRE_APPROVED'
+  | 'DENIED'
   | 'EXPIRED';
 
 export type RegistrationPath = 'pre-invited' | 'walk-in';
