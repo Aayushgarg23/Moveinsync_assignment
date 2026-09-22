@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { RouterModule, Router } from '@angular/router';
 import { VisitorService } from '../../services/visitor.service';
 import { VisitType } from '../../models/visitor.model';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, catchError, of, finalize } from 'rxjs';
@@ -46,7 +47,8 @@ interface GuestEntry {
     MatListModule,
     MatDividerModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    RouterModule
   ],
   templateUrl: './invite-form.component.html',
   styleUrl: './invite-form.component.scss'
