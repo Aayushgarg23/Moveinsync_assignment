@@ -15,9 +15,10 @@
       <mat-spinner diameter="40"></mat-spinner>
     </div>
   } @else if (pendingVisitors().length === 0) {
-    <div class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-12 text-center text-gray-500">
-      <mat-icon style="font-size: 48px; width: 48px; height: 48px;" class="mb-4 text-gray-400">inbox</mat-icon>
-      <p class="text-lg">No pending approvals at the moment.</p>
+    <div class="bg-white border border-dashed border-gray-300 rounded-xl p-16 mt-8 text-center flex-grow flex flex-col justify-center items-center">
+      <mat-icon class="text-gray-300 mb-4" style="font-size: 64px; width: 64px; height: 64px;">check_circle_outline</mat-icon>
+      <h2 class="text-xl font-semibold text-gray-700 mb-2">No visitors waiting for approval</h2>
+      <p class="text-gray-500 max-w-md">You're all caught up! Walk-in requests will appear here when a guest registers at the front desk.</p>
     </div>
   } @else {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
