@@ -98,3 +98,65 @@ channel, mobile app approval flow, exact pixel-matching of screenshots.
   spacing scale throughout
 - Dashboard table: wrap in overflow-x-auto for mobile scroll (card-based
   mobile redesign is optional polish, only if time remains at the end)
+
+
+
+
+  ## Design System — Modern Minimal Aesthetic
+
+### Navigation — HEADER-BASED (not sidebar) on desktop
+- Desktop (>960px): horizontal top nav bar — logo/wordmark on left, nav links
+  (Dashboard, Invite Visitor, Walk-in Check-in, Approvals, Pre-Approvals)
+  inline in the center/left-of-center, notification bell + any future
+  user/profile icon on the right
+- Mobile (<960px): collapse nav links into a hamburger-triggered dropdown/
+  overlay menu, keep logo + hamburger + bell visible in the header bar
+- Active nav link: Indigo-600 text + a small underline/pill indicator, not a
+  sidebar-style left border (that pattern no longer applies)
+- Remove the mat-sidenav-container entirely from AppShellComponent — content
+  area becomes full-width below the header
+
+### Colors
+- Page background: Gray-50 (off-white, not pure white)
+- Header background: White with a subtle bottom border (border-b border-gray-200)
+  and shadow-sm — NOT a dark/colored bar
+- Primary accent: Indigo-600, used ONLY for primary buttons, active nav
+  state, and links — sparingly elsewhere
+- Primary buttons: bg-gradient-to-r from-indigo-600 to-indigo-500, white
+  text, shadow-sm
+- Success: Emerald-600, Danger: Red-600, Warning: Amber-600 — status chips
+  and critical actions only
+- Status chips: SOFT/PASTEL backgrounds, not solid fills:
+  Overstay: bg-red-50 text-red-700 border border-red-200
+  Checked-in: bg-emerald-50 text-emerald-700 border border-emerald-200
+  Pending: bg-amber-50 text-amber-700 border border-amber-200
+  Pre-approved: bg-indigo-50 text-indigo-700 border border-indigo-200
+- Avatars: rotate background color per visitor/host (hash of name) from:
+  bg-indigo-100 text-indigo-700, bg-emerald-100 text-emerald-700,
+  bg-amber-100 text-amber-700, bg-rose-100 text-rose-700,
+  bg-blue-100 text-blue-700 — never the same color for every avatar
+
+### Typography
+- Page titles: text-2xl font-semibold tracking-tight text-gray-900
+- Section headers: text-xs font-semibold uppercase tracking-wide text-gray-500
+- Body/table text: text-sm text-gray-700
+- Helper text: text-sm text-gray-500
+
+### Elevation & Depth
+- Cards: bg-white border border-gray-100 shadow-sm rounded-xl
+- Dialogs: shadow-xl rounded-2xl
+- Hover on cards/rows: hover:shadow-md hover:-translate-y-0.5
+  transition-all duration-200
+
+### Spacing
+- Card padding: p-6, Section gaps: space-y-6, consistent rounded-xl everywhere
+
+### Interactive states
+- Focus: ring-2 ring-indigo-500 ring-offset-2
+- Disabled: opacity-50 cursor-not-allowed
+
+### Icons & Branding
+- Header logo: a clean custom mark (not generic Material shield icon) — a
+  minimal geometric badge/checkmark combination in Indigo-600
+- Notification bell: functional, click opens a panel, shows
+  "No new notifications" when empty
