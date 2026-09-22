@@ -1,13 +1,14 @@
-import { Component, inject, signal, ViewChild, DestroyRef } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatMenuModule } from '@angular/material/menu';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-shell',
@@ -15,11 +16,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [
     CommonModule,
     RouterModule,
-    MatSidenavModule,
     MatToolbarModule,
     MatListModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule
   ],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss'
@@ -27,10 +28,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class AppShellComponent {
   private breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   
-  @ViewChild('sidenav') sidenav!: MatSidenav;
-
   isMobile = signal(false);
+  currentRoute = signal('');
 
   navItems = [
     { label: 'Dashboard', route: '/dashboard', icon: 'dashboard' },
@@ -42,17 +43,21 @@ export class AppShellComponent {
 
   constructor() {
     this.breakpointObserver
-      .observe(['(max-width: 767px)'])
+      .observe(['(max-width: 959px)'])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         this.isMobile.set(result.matches);
-        // Automatically close the sidenav on mobile when navigating, if needed.
       });
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((event: any) => {
+      this.currentRoute.set(event.urlAfterRedirects.split('?')[0]);
+    });
   }
 
-  closeSidenavIfMobile() {
-    if (this.isMobile() && this.sidenav) {
-      this.sidenav.close();
-    }
+  isActive(route: string): boolean {
+    return this.currentRoute().startsWith(route);
   }
 }
