@@ -51,7 +51,24 @@
         <span class="text-gray-500">Exit Time:</span>
         <span class="text-gray-800 font-medium">{{ visitor.checkOutTime | date:'medium' }}</span>
       </div>
+      
+      <div class="flex justify-between" *ngIf="visitor.sponsorLOS">
+        <span class="text-gray-500">Sponsor LOS:</span>
+        <span class="text-gray-800 font-medium">{{ visitor.sponsorLOS }}</span>
+      </div>
+      
+      <div class="flex justify-between" *ngIf="visitor.tempCardNo">
+        <span class="text-gray-500">Temp Card No:</span>
+        <span class="text-gray-800 font-medium">{{ visitor.tempCardNo }}</span>
+      </div>
     </div>
+  </div>
+
+  <div class="mb-6">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Additional Information (Local Notes)</mat-label>
+      <textarea matInput [ngModel]="localNotes()" (ngModelChange)="localNotes.set($event)" rows="3" placeholder="Add ad-hoc notes here..."></textarea>
+    </mat-form-field>
   </div>
 
   <div class="flex justify-end gap-3 pt-2">

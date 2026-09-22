@@ -4,6 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 import { Visitor, Host } from '../../models/visitor.model';
 import { VisitorService } from '../../services/visitor.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,6 +25,9 @@ export interface GuestDetailData {
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
     VisitorStatusPipe
   ],
   templateUrl: './guest-detail-dialog.component.html',
@@ -30,6 +36,7 @@ export interface GuestDetailData {
 export class GuestDetailDialogComponent {
   visitor: Visitor & { host?: Host };
   isProcessing = signal(false);
+  localNotes = signal('');
 
   private visitorService = inject(VisitorService);
   private snackBar = inject(MatSnackBar);
@@ -39,6 +46,7 @@ export class GuestDetailDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: GuestDetailData
   ) {
     this.visitor = data.visitor;
+    this.localNotes.set(this.visitor.additionalInfo || '');
   }
 
   simulateCheckIn() {
