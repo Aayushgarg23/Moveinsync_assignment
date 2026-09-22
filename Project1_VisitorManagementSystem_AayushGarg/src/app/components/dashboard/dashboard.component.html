@@ -1,4 +1,118 @@
-<div class="p-6">
-  <h2 class="text-2xl font-semibold mb-4">Dashboard Placeholder</h2>
-  <p class="text-gray-500">The front desk dashboard will go here.</p>
+<div class="h-[calc(100vh-64px)] p-6 bg-gray-50 flex flex-col">
+  
+  <div class="flex items-center justify-between mb-6 flex-shrink-0">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Front Desk Dashboard</h1>
+      <p class="text-sm text-gray-500">Monitor active visitors, overstays, and check-ins.</p>
+    </div>
+    
+    <div class="w-72">
+      <mat-form-field appearance="outline" class="w-full h-14 bg-white" subscriptSizing="dynamic">
+        <mat-icon matPrefix class="text-gray-400">search</mat-icon>
+        <input matInput placeholder="Search by name, email, or phone..." 
+               [ngModel]="searchQuery()" 
+               (ngModelChange)="onSearchChange($event)">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 flex-shrink-0">
+    <mat-card class="!bg-white border border-gray-100 shadow-sm">
+      <mat-card-content class="p-6 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Total Visitors</p>
+          <p class="text-3xl font-bold text-gray-900">{{ totalCount() }}</p>
+        </div>
+        <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+          <mat-icon>people</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="!bg-white border border-gray-100 shadow-sm">
+      <mat-card-content class="p-6 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Checked-In</p>
+          <p class="text-3xl font-bold text-green-600">{{ checkedInCount() }}</p>
+        </div>
+        <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-600">
+          <mat-icon>how_to_reg</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="!bg-white border border-gray-100 shadow-sm">
+      <mat-card-content class="p-6 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Overstays</p>
+          <p class="text-3xl font-bold text-red-600">{{ overstayCount() }}</p>
+        </div>
+        <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600">
+          <mat-icon>warning</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="flex-grow bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+    <div class="overflow-x-auto flex-grow">
+      <table mat-table [dataSource]="filteredVisitors()" class="w-full">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-600"> Visitor </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex flex-col py-2 cursor-pointer" (click)="openGuestDetail(element)">
+              <span class="font-medium text-gray-900">{{ element.name }}</span>
+              <span class="text-xs text-gray-500 flex items-center">
+                <mat-icon class="text-xs mr-1" style="font-size: 14px; width: 14px; height: 14px;">person</mat-icon>
+                Host: {{ element.host?.name || 'Unknown' }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Visit Type Column -->
+        <ng-container matColumnDef="visitType">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-600"> Type </th>
+          <td mat-cell *matCellDef="let element" class="text-gray-700"> {{ element.visitType }} </td>
+        </ng-container>
+
+        <!-- Entry Time Column -->
+        <ng-container matColumnDef="checkInTime">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-600"> Entry Time </th>
+          <td mat-cell *matCellDef="let element" class="text-gray-600 text-sm"> 
+            {{ element.checkInTime ? (element.checkInTime | date:'shortTime') : '-' }} 
+          </td>
+        </ng-container>
+
+        <!-- Exit Time Column -->
+        <ng-container matColumnDef="checkOutTime">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-600"> Exit Time </th>
+          <td mat-cell *matCellDef="let element" class="text-gray-600 text-sm"> 
+            {{ element.checkOutTime ? (element.checkOutTime | date:'shortTime') : '-' }} 
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-600"> Status </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="px-3 py-1 rounded-full text-xs" [ngClass]="getStatusClass(element.status)">
+              {{ element.status.replace('_', ' ') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="bg-gray-50"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 transition-colors"></tr>
+
+        <!-- No Data Row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center py-8 text-gray-500" colspan="5">
+            No visitors found matching "{{ searchQuery() }}"
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>

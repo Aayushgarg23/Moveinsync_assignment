@@ -54,7 +54,8 @@ const MOCK_VISITORS: Visitor[] = [
     hostId: 'h1',
     status: 'CHECKED_IN',
     registrationPath: 'pre-invited',
-    checkInTime: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 15),
+    // 9 hours ago precisely to trigger OVERSTAY logic
+    checkInTime: new Date(now.getTime() - 9 * 60 * 60 * 1000),
     checkOutTime: null,
     expectedStartTime: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0),
     expectedEndTime: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0),
@@ -159,7 +160,7 @@ const MOCK_VISITORS: Visitor[] = [
     hostId: 'h2',
     status: 'CHECKED_IN',
     registrationPath: 'walk-in',
-    checkInTime: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 0),
+    checkInTime: new Date(now.getTime() - 2 * 60 * 60 * 1000),
     checkOutTime: null,
     expectedStartTime: null,
     expectedEndTime: null,
