@@ -3,7 +3,7 @@
   <!-- Idle state: show start camera button -->
   @if (cameraMode() === 'idle') {
     <div class="flex flex-col items-center gap-3">
-      <div class="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+      <div class="w-64 h-48 bg-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300">
         <mat-icon class="text-gray-300" style="font-size: 64px; width: 64px; height: 64px;">photo_camera</mat-icon>
       </div>
       <button mat-raised-button color="primary" type="button" (click)="startCamera()">
@@ -17,7 +17,7 @@
   @if (cameraMode() === 'streaming') {
     <div class="flex flex-col items-center gap-3">
       <video #videoEl autoplay playsinline
-             class="w-64 h-48 rounded-lg border-2 border-indigo-300 object-cover bg-black">
+             class="w-64 h-48 rounded-xl border-2 border-indigo-400 object-cover bg-black shadow-inner">
       </video>
       <button mat-raised-button color="accent" type="button" (click)="captureFrame()">
         <mat-icon class="mr-1">camera</mat-icon>
@@ -30,7 +30,7 @@
   @if (cameraMode() === 'captured') {
     <div class="flex flex-col items-center gap-3">
       <img [src]="capturedPhoto()" alt="Captured visitor photo"
-           class="w-48 h-48 rounded-lg border-2 border-green-400 object-cover" />
+           class="w-64 h-48 rounded-xl border-2 border-green-500 object-cover shadow-sm" />
       <div class="flex gap-2">
         <button mat-stroked-button color="warn" type="button" (click)="retake()">
           <mat-icon class="mr-1">refresh</mat-icon>
@@ -43,24 +43,24 @@
   <!-- Fallback: camera denied / unavailable -->
   @if (cameraMode() === 'fallback') {
     <div class="flex flex-col items-center gap-3 text-center">
-      <div class="flex items-center gap-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-md">
+      <div class="flex items-center gap-2 text-amber-700 bg-amber-50 px-4 py-2 rounded-md border border-amber-200">
         <mat-icon>warning</mat-icon>
         <span class="text-sm">{{ cameraError() }} Please upload a photo instead.</span>
       </div>
 
       @if (!capturedPhoto()) {
         <label class="cursor-pointer">
-          <div class="w-48 h-48 bg-gray-100 rounded-lg flex flex-col items-center justify-center
-                      border-2 border-dashed border-gray-300 hover:border-indigo-400 transition-colors">
+          <div class="w-64 h-48 bg-gray-50 rounded-xl flex flex-col items-center justify-center
+                      border-2 border-dashed border-gray-300 hover:border-indigo-400 hover:bg-gray-100 transition-all duration-200">
             <mat-icon class="text-gray-400 mb-2" style="font-size: 40px; width: 40px; height: 40px;">cloud_upload</mat-icon>
-            <span class="text-sm text-gray-500">Click to upload</span>
+            <span class="text-sm text-gray-500 font-medium">Click to upload photo</span>
           </div>
           <input type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
         </label>
       } @else {
         <img [src]="capturedPhoto()" alt="Uploaded visitor photo"
-             class="w-48 h-48 rounded-lg border-2 border-green-400 object-cover" />
-        <label class="cursor-pointer">
+             class="w-64 h-48 rounded-xl border-2 border-green-500 object-cover shadow-sm" />
+        <label class="cursor-pointer mt-2">
           <button mat-stroked-button color="primary" type="button"
                   (click)="fileInput.click()">
             <mat-icon class="mr-1">cloud_upload</mat-icon>
