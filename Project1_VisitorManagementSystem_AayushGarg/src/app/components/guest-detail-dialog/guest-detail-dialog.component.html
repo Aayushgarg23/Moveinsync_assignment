@@ -97,8 +97,8 @@
     
     <!-- If Checked-In or Overstay, show Check-Out button -->
     <button *ngIf="visitor.status === 'CHECKED_IN' || visitor.status === 'OVERSTAY'" 
-            mat-flat-button color="accent"
-            class="!bg-rose-600 !text-white w-full sm:w-auto hover:!bg-rose-700"
+            mat-flat-button
+            class="!bg-red-600 !text-white w-full sm:w-auto hover:!bg-red-700 shadow-none transition-colors"
             [disabled]="isProcessing()"
             (click)="checkOut()">
       <mat-spinner diameter="16" class="inline-block mr-2" *ngIf="isProcessing()"></mat-spinner>

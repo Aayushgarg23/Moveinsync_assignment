@@ -153,7 +153,8 @@
     </div>
 
     <!-- Right: Permanent Side Panel (35%) - Hidden on mobile/tablet -->
-    <div class="hidden lg:flex lg:w-1/3 bg-white rounded-xl shadow-sm border border-gray-200 overflow-y-auto flex-col h-full shrink-0">
+    <!-- Right: Permanent Side Panel (35%) - Hidden on mobile/tablet -->
+    <div class="hidden lg:flex lg:w-1/3 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-col h-full shrink-0">
       
       @if (!selectedVisitor()) {
         <!-- Placeholder Empty State -->
@@ -166,9 +167,9 @@
         </div>
       } @else {
         <!-- Detail Panel -->
-        <div class="flex flex-col h-full">
+        <div class="flex flex-col h-full overflow-hidden">
           <!-- Header (Avatar + Name) -->
-          <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+          <div class="p-6 border-b border-gray-100 bg-gray-50/50 shrink-0">
             <div class="flex gap-4 items-start">
               <img [src]="selectedVisitor()?.photoUrl || 'assets/placeholder.png'" 
                    class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
@@ -187,7 +188,7 @@
             </div>
           </div>
 
-          <div class="p-6 flex-grow flex flex-col gap-6">
+          <div class="p-6 flex-grow flex flex-col gap-6 overflow-y-auto min-h-0">
             <!-- Timeline -->
             <div>
               <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-1">
@@ -228,7 +229,7 @@
             </div>
 
             <!-- Other Details Accordion -->
-            <mat-accordion class="mt-2">
+            <mat-accordion class="mt-2 shrink-0">
               <mat-expansion-panel class="shadow-none border border-gray-100 !bg-gray-50/50">
                 <mat-expansion-panel-header>
                   <mat-panel-title class="text-sm font-medium text-gray-700">
@@ -255,7 +256,7 @@
                   </div>
                   <div class="flex justify-between" *ngIf="selectedVisitor()?.additionalInfo">
                     <span class="text-gray-500">Notes:</span>
-                    <span class="font-medium text-right line-clamp-2 max-w-[150px]" [title]="selectedVisitor()?.additionalInfo">{{ selectedVisitor()?.additionalInfo }}</span>
+                    <span class="font-medium text-right max-w-[150px]" style="word-break: break-word;" [title]="selectedVisitor()?.additionalInfo">{{ selectedVisitor()?.additionalInfo }}</span>
                   </div>
                 </div>
               </mat-expansion-panel>
@@ -271,7 +272,7 @@
                 <mat-icon *ngIf="!isProcessing()">qr_code_scanner</mat-icon> Simulate Check-In
               </button>
             } @else if (selectedVisitor()?.status === 'CHECKED_IN' || selectedVisitor()?.status === 'OVERSTAY') {
-              <button mat-flat-button color="accent" class="!bg-rose-600 w-full py-5 text-base hover:!bg-rose-700 text-white"
+              <button mat-flat-button class="!bg-red-600 !text-white w-full py-5 text-base hover:!bg-red-700 shadow-none transition-colors"
                       [disabled]="isProcessing()" (click)="checkOut()">
                 <mat-spinner diameter="18" class="inline-block mr-2" *ngIf="isProcessing()"></mat-spinner>
                 <mat-icon *ngIf="!isProcessing()">logout</mat-icon> Check-Out
