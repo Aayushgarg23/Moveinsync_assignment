@@ -1,12 +1,12 @@
-<div class="h-[calc(100vh-64px)] p-6 bg-gray-50 flex flex-col">
+<div class="h-[calc(100vh-64px)] p-6 bg-slate-50/50 flex flex-col">
   
-  <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 flex-shrink-0 gap-4">
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 flex-shrink-0 gap-4">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">Front Desk Dashboard</h1>
-      <p class="text-sm text-gray-500">Monitor active visitors, overstays, and check-ins.</p>
+      <h1 class="text-[28px] font-bold text-slate-900 tracking-tight leading-tight">Front Desk Dashboard</h1>
+      <p class="text-sm text-slate-500 mt-1">Monitor active visitors, overstays, and check-ins.</p>
     </div>
     
-    <div class="flex flex-col sm:flex-row items-center gap-3 bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
+    <div class="flex flex-col sm:flex-row items-center gap-3 bg-white p-1.5 rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
       <mat-form-field appearance="outline" class="w-full sm:w-60" subscriptSizing="dynamic">
         <mat-icon matPrefix class="text-gray-400">schedule</mat-icon>
         <mat-select [ngModel]="timeRange()" (ngModelChange)="timeRange.set($event)">
@@ -36,37 +36,37 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 flex-shrink-0">
-    <mat-card class="!bg-white border border-gray-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <mat-card class="!bg-white !rounded-2xl border border-slate-200/60 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <mat-card-content class="p-6 flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Total Visitors</p>
-          <p class="text-3xl font-bold text-gray-900">{{ totalCount() }}</p>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Total Visitors</p>
+          <p class="text-3xl font-bold text-slate-900 tracking-tight">{{ totalCount() }}</p>
         </div>
-        <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+        <div class="w-12 h-12 bg-indigo-50/80 rounded-2xl flex items-center justify-center text-indigo-600 shadow-inner">
           <mat-icon>people</mat-icon>
         </div>
       </mat-card-content>
     </mat-card>
     
-    <mat-card class="!bg-white border border-gray-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <mat-card class="!bg-white !rounded-2xl border border-slate-200/60 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <mat-card-content class="p-6 flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Checked-In</p>
-          <p class="text-3xl font-bold text-green-600">{{ checkedInCount() }}</p>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Checked-In</p>
+          <p class="text-3xl font-bold text-emerald-600 tracking-tight">{{ checkedInCount() }}</p>
         </div>
-        <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-600">
+        <div class="w-12 h-12 bg-emerald-50/80 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner">
           <mat-icon>how_to_reg</mat-icon>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="!bg-white border border-gray-100 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <mat-card class="!bg-white !rounded-2xl border border-slate-200/60 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <mat-card-content class="p-6 flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Overstays</p>
-          <p class="text-3xl font-bold text-red-600">{{ overstayCount() }}</p>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Overstays</p>
+          <p class="text-3xl font-bold text-rose-600 tracking-tight">{{ overstayCount() }}</p>
         </div>
-        <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600">
+        <div class="w-12 h-12 bg-rose-50/80 rounded-2xl flex items-center justify-center text-rose-600 shadow-inner">
           <mat-icon>warning</mat-icon>
         </div>
       </mat-card-content>
@@ -76,7 +76,7 @@
   <div class="flex-grow flex flex-col lg:flex-row gap-6 overflow-hidden">
     
     <!-- Left: Table (65%) -->
-    <div class="flex-grow lg:w-2/3 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+    <div class="flex-grow lg:w-2/3 bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden flex flex-col">
       <div class="overflow-x-auto flex-grow">
         <table mat-table [dataSource]="filteredVisitors()" class="w-full">
           <!-- Name Column -->
@@ -154,7 +154,7 @@
 
     <!-- Right: Permanent Side Panel (35%) - Hidden on mobile/tablet -->
     <!-- Right: Permanent Side Panel (35%) - Hidden on mobile/tablet -->
-    <div class="hidden lg:flex lg:w-1/3 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-col h-full shrink-0">
+    <div class="hidden lg:flex lg:w-1/3 bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden flex-col h-full shrink-0">
       
       @if (!selectedVisitor()) {
         <!-- Placeholder Empty State -->
