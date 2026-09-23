@@ -1,150 +1,272 @@
-# Visitor Management System — MoveInSync Case Study (Project 1)
+# 🛡️ MoveInSync — Visitor Management System
 
-A frontend-focused Visitor Management System built for MoveInSync's
-Software Development Intern case study assignment, implementing
-pre-approval scheduling, walk-in registration, host approval workflows,
-and front-desk visitor tracking.
+> **Frontend Intern Case Study · Project 1**  
+> A fully client-side Visitor Management System built with Angular 18, Angular Signals, RxJS and Tailwind CSS.
 
-## Tech Stack
+<br>
 
-- **Angular 18** (standalone components)
-- **Angular Signals** — all UI state management
-- **RxJS** — simulated async operations (`of().pipe(delay())`), bridged to
-  signals via `toSignal()` from `@angular/core/rxjs-interop`
-- **Angular Material** (Indigo/Pink theme) — complex UI components
-  (tables, dialogs, form fields, date pickers, chips)
-- **Tailwind CSS** — layout and spacing (Preflight disabled to avoid
-  conflicting with Material's base styles)
-- **angularx-qrcode** — E-pass QR code generation
-- Mock data layer only — no backend/database (per assignment instructions,
-  which explicitly permit mock data when an API isn't available)
+## 🌐 Live Demo
 
-## Setup
+**Deployed on Netlify:** *(add your Netlify URL here once deployed)*  
+**GitHub Repository:** https://github.com/Aayushgarg23/Moveinsync_assignment
 
-```bash
-npm install
-npx -p @angular/cli@18 ng serve
+<br>
+
+## 📸 Screenshots
+
+### Dashboard — Today's Visitors
+![Dashboard](src/assets/screenshots/01-dashboard.png)
+
+### Guest Detail Dialog
+![Guest Detail Dialog](src/assets/screenshots/02-guest-detail.png)
+
+### Invite Visitor Form
+![Invite Visitor](src/assets/screenshots/03-invite-visitor.png)
+
+### Host Approval Queue
+![Approvals](src/assets/screenshots/04-approvals.png)
+
+### Pre-Approvals List
+![Pre-Approvals](src/assets/screenshots/05-pre-approvals.png)
+
+<br>
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Angular 18 (Standalone Components) |
+| State Management | Angular Signals (`signal`, `computed`) |
+| Async / Data Layer | RxJS (`of`, `delay`, `forkJoin`, `catchError`, `switchMap`) |
+| Signals ↔ RxJS Bridge | `toSignal()` from `@angular/core/rxjs-interop` |
+| UI Components | Angular Material (Dialogs, Snackbars, Buttons, Icons, Select, Datepicker) |
+| Styling | Tailwind CSS (layout/spacing) + custom SCSS (Material token overrides) |
+| Forms | Angular Reactive Forms (`FormGroup`, `FormBuilder`, `Validators`) |
+| QR Code | `angularx-qrcode` |
+| Build Tool | Angular CLI 18 |
+| Deployment | Netlify (via `netlify.toml`) |
+
+> **No backend. No database.** All data lives in an in-memory mock service with simulated RxJS `delay()` to demonstrate async patterns, loading states, and error handling.
+
+<br>
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── app-shell/           # Root shell: floating navbar, hamburger, profile/notif menus
+│   │   ├── dashboard/           # Today's visitor table + right-side detail panel
+│   │   ├── invite-form/         # Pre-approval invite form + QR dialog trigger
+│   │   ├── walk-in-form/        # Kiosk-style walk-in registration
+│   │   ├── approvals/           # Host approval queue (approve / reject)
+│   │   ├── pre-approvals/       # Pre-approved upcoming visits list
+│   │   ├── guest-detail-dialog/ # Full visitor profile modal
+│   │   └── qr-dialog/          # E-Pass / QR code popup
+│   ├── models/
+│   │   └── visitor.model.ts     # TypeScript interfaces: Visitor, Host, ApprovalRequest, PreApproval
+│   ├── pipes/
+│   │   └── visitor-status.pipe.ts  # Converts SNAKE_CASE enum → human-readable label
+│   └── services/
+│       └── visitor.service.ts   # Mock API service with in-memory store + RxJS simulation
 ```
 
-Navigate to `http://localhost:4200`.
+<br>
 
-## Features Implemented
+---
 
-### 1. Invite / Pre-Approval (host-initiated scheduling)
-Hosts schedule visitor access in advance for a specific date/time window.
-Since scheduling and approval are the same host action (per spec), a
-QR/e-pass is generated immediately on confirmation. Enforces a maximum of
-5 pre-approvals per host per day. Passes auto-expire if the visitor
-doesn't check in within the scheduled window.
+## ✨ Features Implemented
 
-### 2. Walk-in / Self Check-in (unscheduled visitors)
-Front-desk/kiosk registration for visitors without a prior invite.
-Captures a live photo via the device webcam (`navigator.mediaDevices.getUserMedia`), with a graceful fallback to file upload if camera
-permission is denied. Submissions enter a pending-approval state and
-notify the relevant host.
+### 1. 🏠 App Shell & Navigation
+- Floating glassmorphic header with the **MoveInSync VMS** shield logo
+- Desktop: horizontal nav with active-link underline indicator
+- Mobile: hamburger → slide-in dropdown menu
+- Notification bell (dropdown with empty state)
+- User profile button → dropdown with Profile + Logout options
 
-### 3. Host Approval Workflow
-A queue of pending walk-in visitors, where hosts can approve (generates
-QR badge, visitor checked in) or reject (visitor denied, security
-notified via toast) each request.
+### 2. 📊 Front-Desk Dashboard
+- **Today's Visitors** table: Visitor (name + host sub-text with department), Type of Invite, Entry Time, Exit Time, Status
+- **Live Search** — filter by name, email, or phone
+- **Status Filter** — All / Checked In / Pending / Pre-Approved / Overstay
+- **Overstay Detection** — `computed()` signal automatically flags any visitor checked in for ≥ 8 hours
+- **Visitor Detail Panel** — click any row to open:
+  - Desktop: smooth right-hand sidebar with full profile
+  - Mobile: scrollable popup modal
+- **Check-Out Button** in detail panel / dialog
+- **View Full Record** button to open the full Guest Detail dialog from the sidebar
 
-### 4. Front Desk Dashboard
-Real-time view of all visitor activity: searchable and filterable
-(by name/email/phone and by date/time range) table with visitor status,
-host, entry/exit times. Visitors checked in for more than 8 hours are
-automatically flagged as "Overstay" via a reactive computed signal.
-Clicking a row opens a detail view with full visitor/host information
-and check-in/check-out actions.
+### 3. 📨 Invite Visitor (Pre-Approval Path)
+- Fill out Event Title, Type of Visit, Office, Date, Start/End Time window
+- Search and add multiple guests (searches existing visitors + hosts)
+- Added guests shown with colorful **initials avatars** (no photo upload needed)
+- On submit: visitor created with `PRE_APPROVED` status → **QR E-Pass dialog** opens immediately
+- Enforces **max 5 pre-approvals per host per day** with error feedback
+- Pre-approved visitors auto-expire when their time window passes (`checkAndExpirePasses()`)
 
-### 5. Pre-Approvals Overview
-Dedicated view of all upcoming scheduled (pre-approved) visits, separate
-from the live-activity dashboard, with a live countdown to each pass's
-expiry and a cancel action. Note: since scheduling and approval are the
-same host action for pre-approved visits (see Feature 1), this view only
-offers "Cancel" — there is no separate approve step here, as approval
-already happened at scheduling time.
+### 4. 🚶 Walk-In Registration
+- Full registration form: Full Name, Company, Phone, Email, Purpose, Host, Visit Type
+- Simulates **webcam photo capture** (with file-upload fallback)
+- NDA Signed + Badge Printed toggle switches
+- On submit: visitor created with `PENDING_APPROVAL` status → sent to the **Host Approval Queue**
+- If no photo is captured, a colorful **auto-generated initials avatar** (SVG data-URI) is assigned
 
-### 6. Error Handling
-A centralized `ErrorSnackbarService` displays all error messages through
-a consistent Material Snackbar UI. A ~10% random failure rate is injected
-into mocked async operations (simulating real-world network failures) via
-a reusable `withRandomError<T>()` RxJS operator. A guaranteed, reproducible
-failure path exists for exceeding the 5-per-day pre-approval limit, for
-reliable demonstration.
+### 5. ✅ Host Approval Queue
+- Cards for all walk-in visitors awaiting host decision
+- **Approve** → visitor status becomes `CHECKED_IN`, card removed from queue, visitor appears on Dashboard
+- **Reject** → visitor status becomes `DENIED`, card removed
+- Refresh button to re-poll the in-memory store
 
-### 7. Empty States
-All list views (Dashboard, Approvals, Pre-Approvals) show clear,
-friendly messaging when no data matches the current view/filters, rather
-than a blank table.
+### 6. 📅 Pre-Approvals List
+- Table of all upcoming invited visitors with time windows
+- **Expired** badge for visitors whose time window has already passed
+- Cancel button to remove a pre-approval record
 
-## Architecture Notes
+### 7. 👤 Guest Detail Dialog
+- Full visitor profile: avatar, name, company, role, status badge
+- Contact section: phone + email
+- Host section: name + **department** (e.g. "Rahul Mehta, Product")
+- Visit Details: Purpose, Entry/Exit Time, Sponsor LOS, Temp Card No
+- Check-In Timeline: Arrival → Check-In → Check-Out timestamps
+- Editable **Additional Information** free-text notes field
+- Context-aware action buttons: **Simulate Check-In** (PRE_APPROVED) or **Check-Out** (CHECKED_IN / OVERSTAY)
 
-- **State management**: Angular Signals are the single source of truth
-  for UI state (`signal()`, `computed()`). Async operations use RxJS in
-  the service layer, bridged into signals via `toSignal()` — this was a
-  deliberate choice to demonstrate proficiency in both reactive paradigms
-  named in the job description, using each where it's idiomatic (RxJS for
-  async data streams, Signals for synchronous derived UI state).
-- **Mock data layer**: `VisitorService` holds all application data
-  in-memory, simulating network latency and failure with RxJS operators.
-  This was a deliberate scope decision — the assignment instructions
-  explicitly permit mock data in place of a real API, and as a Frontend
-  Intern candidate, the evaluation focus is architecture, component
-  design, and UX — not backend infrastructure.
+<br>
 
-## Complexity Analysis
+---
 
-| Operation | Time Complexity | Space Complexity | Notes |
-|---|---|---|---|
-| Visitor search/filter (Dashboard) | O(n) | O(n) | Linear scan over in-memory visitor list per keystroke; acceptable at current mock scale (single-digit to low-hundreds of visitors per location) |
-| Overstay detection (`computed` signal) | O(n) | O(1) additional | Recomputes on every visitor-list change; re-derives rather than storing separate state, avoiding sync bugs at the cost of recomputation on each change |
-| Daily pre-approval count check | O(n) | O(1) | Filters visitor list by host + date on each new pre-approval attempt |
-| Guest search-and-add (Invite form) | O(n) | O(k) | k = number of matched suggestions shown |
-| QR code generation | O(1) | O(1) | Delegated to `angularx-qrcode`, encodes a fixed-size payload (visitor ID + validity window) |
+## 🔄 Page Inter-Relations & Full Workflows
 
-At current scale (mock data, single-office simulation), O(n) linear scans
-are appropriate and add negligible overhead. The scalability section below
-addresses how this would change at production scale.
+```
+Invite Form
+    │  (status: PRE_APPROVED)
+    ▼
+Pre-Approvals List ──► [Simulate Check-In] ──► Dashboard (CHECKED_IN)
 
-## Scalability Notes (design intent, not implemented — per assignment scope)
+Walk-In Form
+    │  (status: PENDING_APPROVAL)
+    ▼
+Host Approval Queue
+    ├── [Approve] ──► Dashboard (CHECKED_IN)
+    └── [Reject]  ──► Dashboard (DENIED)
 
-The current implementation uses in-memory mock data suitable for a
-demonstration/interview context. For production scale (e.g., 10,000+
-visitors/day across multiple offices), the following changes would be
-made:
+Dashboard
+    └── Click Row ──► Detail Panel / Dialog
+                           └── [Check-Out] ──► Dashboard (CHECKED_OUT)
+```
 
-- **Data layer**: Move from in-memory arrays to a real backend (e.g.,
-  PostgreSQL) with the visitor table indexed on `hostId` and
-  `checkInTime`, since these are the two fields every dashboard query
-  filters/sorts by.
-- **Dashboard query pattern**: Replace client-side O(n) filtering with
-  server-side pagination and filtering — the frontend would request a
-  page of results matching the search/date filters rather than filtering
-  a fully-loaded list, keeping frontend memory and render cost constant
-  regardless of total visitor volume.
-- **Real-time updates**: Replace the current polling-free, purely
-  client-triggered state model with WebSockets or Server-Sent Events for
-  live approval notifications, so hosts receive real-time alerts without
-  a page refresh.
-- **Overstay detection**: At scale, this would move from a client-side
-  `computed()` signal (fine for the current small mock dataset) to a
-  scheduled backend job that flags overstays periodically, with the
-  frontend simply displaying the flagged status rather than deriving it
-  from raw timestamps on every client.
-- **Photo storage**: Captured visitor photos would move from in-memory
-  base64 data URLs to object storage (e.g., S3) with the visitor record
-  storing only a reference URL.
+<br>
 
-## Known Limitations (by design, given assignment scope and timeline)
+---
 
-- No real backend/database/authentication — explicitly out of scope per
-  assignment instructions and appropriate for a Frontend Intern
-  evaluation
-- No automated tests — manual QA performed instead, prioritizing feature
-  completeness within the assignment timeline
-- Random error simulation and mock data reset on page refresh (no
-  persistence layer)
+## ⏱️ Time & Space Complexity Analysis
 
-## Demo Video
+### Dashboard — Visitor Loading & Filtering
 
-[Link to be added]
+| Operation | Time Complexity | Notes |
+|---|---|---|
+| Load visitors + hosts | O(V + H) | Single forkJoin; H = host count, V = visitor count |
+| Join host to visitor | O(V × H) | `Array.find()` per visitor — negligible at realistic scale |
+| Overstay computed signal | O(V) | One pass over all visitors on every reactive recalculation |
+| Search filter | O(V) | Linear scan of name/email/phone strings |
+| Space | O(V + H) | Two in-memory arrays |
+
+### Pre-Approval Limit Check
+
+| Operation | Time Complexity | Notes |
+|---|---|---|
+| `getPreApprovalCountForHost()` | O(V) | Filters visitor array by hostId + date + status |
+
+### Auto-Expiry Scan
+
+| Operation | Time Complexity | Notes |
+|---|---|---|
+| `checkAndExpirePasses()` | O(V) | Single `forEach` over all visitors |
+
+> **At 10,000 visitors/day:** The in-memory approach stays O(V) but RAM usage grows linearly. A real implementation would use paginated API calls (e.g. `GET /visitors?page=1&limit=50&date=today`) so only the current page is held in memory — keeping the UI bundle constant at O(page_size).
+
+<br>
+
+---
+
+## 📈 Scalability Notes (10,000 Visitors/Day)
+
+1. **Pagination** — Replace `getVisitors$()` returning the full array with a paginated endpoint. The dashboard table would request one page at a time, keeping memory usage constant.
+2. **Server-Side Filtering** — Move search and status filters to query parameters (`?search=aditya&status=CHECKED_IN`) so the server returns only matching rows.
+3. **WebSocket / SSE for Real-Time** — Replace the manual "Refresh" button on the Approvals page with a WebSocket subscription so host approvals appear instantly without polling.
+4. **Indexed DB / Service Worker** — For offline kiosk usage, cache visitor data in IndexedDB and sync on reconnection.
+5. **Virtual Scrolling** — For very large lists, `@angular/cdk/scrolling`'s `VirtualScrollViewport` renders only visible rows.
+6. **CDN Image Caching** — Store visitor photos on a CDN (e.g. S3 + CloudFront) rather than data-URIs to reduce payload size.
+
+<br>
+
+---
+
+## 🚀 Local Setup & Running
+
+### Prerequisites
+- Node.js 18+
+- npm 9+
+
+### Install & Run
+
+```bash
+# Clone the repository
+git clone https://github.com/Aayushgarg23/Moveinsync_assignment.git
+cd Moveinsync_assignment/Project1_VisitorManagementSystem_AayushGarg
+
+# Install dependencies
+npm install
+
+# Start development server
+npx -p @angular/cli@18 ng serve
+
+# Open in browser
+# http://localhost:4200
+```
+
+### Production Build
+
+```bash
+npx -p @angular/cli@18 ng build --configuration=production
+# Output → dist/moveinsync-vms-app/browser/
+```
+
+<br>
+
+---
+
+## 🎯 Demo Flow (Assignment Required Sequence)
+
+1. **Register via Invite (Pre-Approval path)**
+   - Go to **Invite Visitor** → fill form → add guests → Submit
+   - QR E-Pass dialog appears → close it
+   - Go to **Pre-Approvals** → see the pending card → click **Simulate Check-In**
+   - Go to **Dashboard** → visitor now shows as **Checked In** ✅
+
+2. **Register via Walk-In path**
+   - Go to **Walk-in Check-in** → fill form → toggle Photo/NDA → Submit
+   - Go to **Approvals** → card appears in queue → click **Approve**
+   - Go to **Dashboard** → visitor now shows as **Checked In** ✅
+
+3. **Check-Out**
+   - On Dashboard, click any **Checked In** visitor row
+   - Click **Check-Out** in the detail panel → status changes to **Checked Out** ✅
+
+4. **Overstay Detection**
+   - Aditya Kumar in mock data has a check-in time 9 hours ago
+   - Dashboard automatically shows his status as **Overstay** (red badge) ✅
+
+<br>
+
+---
+
+## 👤 Author
+
+**Aayush Garg**  
+Frontend Intern Applicant — MoveInSync  
+GitHub: [@Aayushgarg23](https://github.com/Aayushgarg23)
