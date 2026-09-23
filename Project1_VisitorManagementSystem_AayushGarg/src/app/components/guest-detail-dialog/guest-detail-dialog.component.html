@@ -1,11 +1,11 @@
-<div class="p-6 md:p-8 relative">
-  <button mat-icon-button mat-dialog-close class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition-colors">
+<div class="p-4 sm:p-6 md:p-8 relative max-h-[85vh] overflow-y-auto">
+  <button mat-icon-button mat-dialog-close class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-800 transition-colors">
     <mat-icon>close</mat-icon>
   </button>
   
-  <div class="flex flex-col sm:flex-row items-start gap-5 mb-8">
+  <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 mb-6 sm:mb-8">
     <img [src]="visitor.photoUrl || 'assets/placeholder.png'" 
-         class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md"
+         class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-white shadow-md"
          alt="Visitor Photo">
     <div class="mt-2 sm:mt-0">
       <h2 class="text-2xl font-bold text-gray-900 mb-1 leading-tight">{{ visitor.name }}</h2>
