@@ -191,6 +191,21 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  openFullRecordDialog(visitor: Visitor & { host?: Host }) {
+    const dialogRef = this.dialog.open(GuestDetailDialogComponent, {
+      data: { visitor },
+      width: '100%',
+      maxWidth: '600px',
+      panelClass: 'responsive-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadData();
+      }
+    });
+  }
+
   simulateCheckIn() {
     const visitor = this.selectedVisitor();
     if (!visitor) return;

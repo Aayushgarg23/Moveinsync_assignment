@@ -195,9 +195,7 @@
              Check-Out
            </button>
         } @else {
-           <button class="w-full py-2.5 bg-white border border-gray-200 rounded-xl text-[13px] font-bold text-gray-900 shadow-sm hover:bg-gray-50 transition-colors">
-             View Full Record
-           </button>
+           <button class="w-full py-2.5 bg-white border border-gray-200 rounded-xl text-[13px] font-bold text-gray-900 shadow-sm hover:bg-gray-50 transition-colors" (click)="openFullRecordDialog(selectedVisitor()!)">View Full Record</button>
         }
       </div>
     } @else {
