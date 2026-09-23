@@ -212,7 +212,7 @@ export class VisitorService {
    */
   private withRandomError<T>() {
     return (source: Observable<T>): Observable<T> => source.pipe(
-      delay(800),
+      delay(200),
       switchMap((data: T) => {
         // 1-in-10 chance of failing
         if (Math.random() < 0.1) {
@@ -373,7 +373,7 @@ export class VisitorService {
       )
       .map(h => ({ id: h.id, name: h.name, email: h.email, phone: h.phone, type: 'host' as const }));
 
-    return of([...matchedVisitors, ...matchedHosts]).pipe(delay(400));
+    return of([...matchedVisitors, ...matchedHosts]).pipe(delay(150));
   }
 
   /**
