@@ -7,7 +7,7 @@
 
 ## 🌐 Live Demo
 
-**Deployed on Netlify:** *(add your Netlify URL here once deployed)*  
+**Deployed on Netlify:** https://visitormanager.netlify.app  
 **GitHub Repository:** https://github.com/Aayushgarg23/Moveinsync_assignment
 
 <br>
@@ -15,19 +15,19 @@
 ## 📸 Screenshots
 
 ### Dashboard — Today's Visitors
-![Dashboard](src/assets/screenshots/01-dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/01-dashboard.png)
 
 ### Guest Detail Dialog
-![Guest Detail Dialog](src/assets/screenshots/02-guest-detail.png)
+![Guest Detail Dialog](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/02-guest-detail.png)
 
 ### Invite Visitor Form
-![Invite Visitor](src/assets/screenshots/03-invite-visitor.png)
+![Invite Visitor](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/03-invite-visitor.png)
 
 ### Host Approval Queue
-![Approvals](src/assets/screenshots/04-approvals.png)
+![Approvals](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/04-approvals.png)
 
 ### Pre-Approvals List
-![Pre-Approvals](src/assets/screenshots/05-pre-approvals.png)
+![Pre-Approvals](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/05-pre-approvals.png)
 
 <br>
 
