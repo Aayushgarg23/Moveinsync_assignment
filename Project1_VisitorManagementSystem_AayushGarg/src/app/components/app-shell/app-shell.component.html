@@ -33,10 +33,13 @@
         </nav>
       }
 
-            <!-- Right: Action -->
-      <div class="flex items-center gap-4">
+                  <!-- Right: Action -->
+      <div class="flex items-center gap-1 sm:gap-4">
         <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="text-gray-500 hover:text-gray-900 transition-colors">
           <mat-icon>notifications</mat-icon>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="text-gray-500 hover:text-gray-900 transition-colors flex items-center justify-center bg-gray-50 border border-gray-200" style="width: 36px; height: 36px; border-radius: 50%;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">person</mat-icon>
         </button>
       </div>
 
@@ -68,4 +71,21 @@
       <span class="font-medium">{{ item.label }}</span>
     </a>
   }
+</mat-menu>
+
+<!-- Profile Dropdown Menu -->
+<mat-menu #profileMenu="matMenu" yPosition="below" class="w-48 mt-2 rounded-xl !bg-white border border-gray-100 shadow-lg">
+  <div class="px-4 py-3 border-b border-gray-100 mb-1 outline-none">
+    <p class="text-sm font-semibold text-gray-900">Admin User</p>
+    <p class="text-xs text-gray-500">admin&#64;moveinsync.com</p>
+  </div>
+  <button mat-menu-item class="text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+    <mat-icon class="text-gray-400">person_outline</mat-icon>
+    <span>Profile</span>
+  </button>
+  <mat-divider class="my-1 border-gray-100"></mat-divider>
+  <button mat-menu-item class="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
+    <mat-icon class="text-rose-500">logout</mat-icon>
+    <span>Logout</span>
+  </button>
 </mat-menu>
