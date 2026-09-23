@@ -38,6 +38,9 @@
       </p>
       <div class="space-y-1">
         <p class="text-sm text-gray-900 font-medium">{{ visitor.host?.name || visitor.hostId }}</p>
+        <p class="text-xs text-gray-500 flex items-center gap-1" *ngIf="visitor.host?.department">
+          <mat-icon style="font-size: 14px; width: 14px; height: 14px;">corporate_fare</mat-icon> {{ visitor.host?.department }}
+        </p>
         <p class="text-xs text-gray-500 truncate flex items-center gap-1">
           <mat-icon style="font-size: 14px; width: 14px; height: 14px;">badge</mat-icon> {{ visitor.visitType }}
         </p>

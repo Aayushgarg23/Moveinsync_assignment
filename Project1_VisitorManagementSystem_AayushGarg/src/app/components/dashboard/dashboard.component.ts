@@ -62,7 +62,13 @@ export class DashboardComponent implements OnInit {
   isMobile = signal(false);
   isProcessing = signal(false);
 
-  // Mapped visitors with OVERSTAY logic applied
+  /**
+   * Derives OVERSTAY status on the fly from CHECKED_IN visitors.
+   * We use a computed() signal so the flag recalculates automatically whenever
+   * allVisitors changes (e.g. after a refresh) without any manual subscription.
+   * 8 hours is the standard business-day threshold per the spec; visitors
+   * still in CHECKED_IN status beyond that window are surfaced as OVERSTAY in red.
+   */
   visitorsWithOverstay = computed(() => {
     const now = new Date().getTime();
     return this.allVisitors().map(v => {

@@ -205,7 +205,11 @@ export class VisitorService {
 
   // ── Simulated async fetchers (RxJS) ─────────────────────────────────
 
-  /** Random failure simulator (10% chance) */
+  /**
+   * Simulates real-world network unreliability (10% failure rate) to demonstrate
+   * error-handling in components. In production this operator would be removed —
+   * its sole purpose is to exercise the catchError paths during demo/review.
+   */
   private withRandomError<T>() {
     return (source: Observable<T>): Observable<T> => source.pipe(
       delay(800),
@@ -331,7 +335,11 @@ export class VisitorService {
     return of(visitor).pipe(this.withRandomError());
   }
 
-  /** Count pre-approvals for a host today (enforces max-5 limit) */
+  /**
+   * Counts how many PreApproval records this host has created today.
+   * We normalise `today` to midnight so any time within the calendar day counts.
+   * Used by the invite form to enforce the 5-per-host-per-day hard limit from the spec.
+   */
   getPreApprovalCountToday$(hostId: string): Observable<number> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -368,6 +376,11 @@ export class VisitorService {
     return of([...matchedVisitors, ...matchedHosts]).pipe(delay(400));
   }
 
+  /**
+   * Synchronous limit-check used at form-submit time.
+   * Converts both dates to a locale date-string for calendar-day comparison so that
+   * timezone offsets do not accidentally allow a 6th booking near midnight.
+   */
   getPreApprovalCountForHost(hostId: string, date: string): number {
     const targetDate = new Date(date).toDateString();
     return this.visitors.filter(v => 
@@ -378,6 +391,11 @@ export class VisitorService {
     ).length;
   }
 
+  /**
+   * Auto-expiry scan: iterates PRE_APPROVED visitors and flips status to EXPIRED
+   * when their expectedEndTime has passed. Called on dashboard load so the table
+   * always reflects the current window without a separate cron job.
+   */
   checkAndExpirePasses(): void {
     const now = new Date();
     this.visitors.forEach(v => {

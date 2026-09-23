@@ -6,6 +6,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class VisitorStatusPipe implements PipeTransform {
   
+  /**
+   * Explicit label map ensures raw enum values (e.g. PENDING_APPROVAL) are
+   * never shown in the UI. Using a dictionary rather than string.replace() means
+   * adding a new status only requires one entry here, not regex changes across templates.
+   */
   private statusMap: Record<string, string> = {
     'PENDING_APPROVAL': 'Pending Approval',
     'PRE_APPROVED': 'Expected',
@@ -20,6 +25,7 @@ export class VisitorStatusPipe implements PipeTransform {
 
   transform(value: string | undefined | null): string {
     if (!value) return '';
+    // Fallback: if a new status arrives that's not in the map, convert SNAKE_CASE → Title Case
     return this.statusMap[value] || value.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
   }
 }

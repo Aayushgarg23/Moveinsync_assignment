@@ -30,7 +30,7 @@
                 <span class="font-semibold text-[13px] text-gray-900">{{ visitor.name }}</span>
                 <span class="text-[11px] text-gray-500 flex items-center gap-1">
                   <mat-icon style="font-size: 10px; width: 10px; height: 10px;">person</mat-icon>
-                  Host: {{ visitor.host?.name || 'Unknown' }}
+                  Host: {{ visitor.host?.name || 'Unknown' }}{{ visitor.host?.department ? ', ' + visitor.host?.department : '' }}
                 </span>
               </div>
             </div>
@@ -130,7 +130,10 @@
              </div>
              <div class="flex justify-between items-center">
                <span class="text-gray-500">Host</span>
-               <span class="text-gray-900 font-medium">{{ selectedVisitor()?.host?.name || 'Unknown' }}</span>
+               <span class="text-gray-900 font-medium">
+                 {{ selectedVisitor()?.host?.name || 'Unknown' }}
+                 <span *ngIf="selectedVisitor()?.host?.department" class="text-gray-500 font-normal">, {{ selectedVisitor()?.host?.department }}</span>
+               </span>
              </div>
            </div>
         </div>
