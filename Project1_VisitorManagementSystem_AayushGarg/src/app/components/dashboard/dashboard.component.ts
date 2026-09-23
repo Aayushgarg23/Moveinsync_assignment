@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal, OnInit } from '@angular/core';
+import { Component, inject, computed, signal, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,13 +9,18 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { VisitorService } from '../../services/visitor.service';
 import { Visitor, Host } from '../../models/visitor.model';
-import { forkJoin, map, catchError } from 'rxjs';
+import { forkJoin, map, catchError, finalize } from 'rxjs';
 import { GuestDetailDialogComponent } from '../guest-detail-dialog/guest-detail-dialog.component';
 import { VisitorStatusPipe } from '../../pipes/visitor-status.pipe';
 import { ErrorSnackbarService } from '../../services/error-snackbar.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,6 +36,8 @@ import { ErrorSnackbarService } from '../../services/error-snackbar.service';
     MatSelectModule,
     MatButtonModule,
     MatTooltipModule,
+    MatExpansionModule,
+    MatProgressSpinnerModule,
     FormsModule,
     VisitorStatusPipe
   ],
@@ -41,6 +48,9 @@ export class DashboardComponent implements OnInit {
   private visitorService = inject(VisitorService);
   private dialog = inject(MatDialog);
   private errorService = inject(ErrorSnackbarService);
+  private breakpointObserver = inject(BreakpointObserver);
+  private destroyRef = inject(DestroyRef);
+  private snackBar = inject(MatSnackBar);
 
   // Core data signals
   allVisitors = signal<(Visitor & { host?: Host })[]>([]);
@@ -48,7 +58,9 @@ export class DashboardComponent implements OnInit {
   // State
   searchQuery = signal('');
   timeRange = signal<'all' | 'today' | 'last24' | 'week'>('all');
-  selectedVisitor = signal<Visitor | null>(null);
+  selectedVisitor = signal<(Visitor & { host?: Host }) | null>(null);
+  isMobile = signal(false);
+  isProcessing = signal(false);
 
   // Mapped visitors with OVERSTAY logic applied
   visitorsWithOverstay = computed(() => {
@@ -115,6 +127,17 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    
+    this.breakpointObserver
+      .observe(['(max-width: 959px)'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        this.isMobile.set(result.matches);
+        // If transitioning to mobile, clear selected visitor to close side panel
+        if (result.matches && this.selectedVisitor()) {
+          this.selectedVisitor.set(null);
+        }
+      });
   }
 
   resetFilters() {
@@ -136,6 +159,12 @@ export class DashboardComponent implements OnInit {
       })
     ).subscribe(data => {
       this.allVisitors.set(data);
+      // Refresh selected visitor if it exists
+      const selected = this.selectedVisitor();
+      if (selected) {
+        const updated = data.find(v => v.id === selected.id);
+        if (updated) this.selectedVisitor.set(updated);
+      }
     });
   }
 
@@ -144,20 +173,47 @@ export class DashboardComponent implements OnInit {
   }
 
   openGuestDetail(visitor: Visitor & { host?: Host }) {
-    this.selectedVisitor.set(visitor);
-    const dialogRef = this.dialog.open(GuestDetailDialogComponent, {
-      data: { visitor },
-      width: '100%',
-      maxWidth: '600px',
-      panelClass: 'responsive-dialog'
-    });
+    if (this.isMobile()) {
+      const dialogRef = this.dialog.open(GuestDetailDialogComponent, {
+        data: { visitor },
+        width: '100%',
+        maxWidth: '600px',
+        panelClass: 'responsive-dialog'
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.selectedVisitor.set(null);
-      if (result) {
-        // Reload if an action was taken
-        this.loadData();
-      }
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.loadData();
+        }
+      });
+    } else {
+      this.selectedVisitor.set(visitor);
+    }
+  }
+
+  simulateCheckIn() {
+    const visitor = this.selectedVisitor();
+    if (!visitor) return;
+    this.isProcessing.set(true);
+    this.visitorService.updateVisitorStatus$(visitor.id, 'CHECKED_IN').pipe(
+      catchError(this.errorService.handleError('Failed to check in visitor.')),
+      finalize(() => this.isProcessing.set(false))
+    ).subscribe(() => {
+      this.snackBar.open('Visitor checked in successfully', 'OK', { duration: 3000 });
+      this.loadData();
+    });
+  }
+
+  checkOut() {
+    const visitor = this.selectedVisitor();
+    if (!visitor) return;
+    this.isProcessing.set(true);
+    this.visitorService.updateVisitorStatus$(visitor.id, 'CHECKED_OUT').pipe(
+      catchError(this.errorService.handleError('Failed to check out visitor.')),
+      finalize(() => this.isProcessing.set(false))
+    ).subscribe(() => {
+      this.snackBar.open('Visitor checked out successfully', 'OK', { duration: 3000 });
+      this.loadData();
     });
   }
 
