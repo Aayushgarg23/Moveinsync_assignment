@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -70,6 +70,8 @@ export class InviteFormComponent {
   offices = ['Bangalore HQ', 'Mumbai Office', 'Delhi NCR', 'Hyderabad Tech Park'];
 
   timeSlots: { value: string, display: string }[] = [];
+
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
   // ── Guest search ────────────────────────────────────────────────────
   searchQuery = signal('');
@@ -159,6 +161,15 @@ export class InviteFormComponent {
     }
 
     const formValue = this.inviteForm.value;
+    
+    // Validate end time is after start time
+    const [startH, startM] = (formValue.startTime as string).split(':').map(Number);
+    const [endH, endM] = (formValue.endTime as string).split(':').map(Number);
+    if ((endH * 60 + endM) <= (startH * 60 + startM)) {
+      this.errorService.showError('End time must be later than start time.');
+      return;
+    }
+
     const guests = this.addedGuests();
     const hostId = guests[0]?.type === 'host' ? guests[0].id : 'h1'; // Default host logic
     
@@ -176,8 +187,6 @@ export class InviteFormComponent {
 
     for (const guest of guests) {
       const date: Date = formValue.date;
-      const [startH, startM] = (formValue.startTime as string).split(':').map(Number);
-      const [endH, endM] = (formValue.endTime as string).split(':').map(Number);
       const startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startH, startM);
       const endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), endH, endM);
 
@@ -236,6 +245,9 @@ export class InviteFormComponent {
             });
 
             this.inviteForm.reset();
+            if (this.formDirective) {
+              this.formDirective.resetForm();
+            }
             this.addedGuests.set([]);
           }
         });

@@ -132,7 +132,7 @@
       <button mat-button type="button" class="px-8 py-6 font-medium text-slate-600 hover:bg-slate-100/80 rounded-2xl transition-colors w-full sm:w-auto" [routerLink]="['/']">
         Cancel
       </button>
-      <button mat-flat-button class="!bg-indigo-600 !text-white hover:!bg-indigo-700 disabled:!bg-slate-200 disabled:!text-slate-400 disabled:!shadow-none disabled:cursor-not-allowed px-10 py-6 text-base font-bold rounded-2xl w-full sm:w-auto shadow-sm transition-all" type="submit"
+      <button mat-flat-button class="!bg-[#0A0A0A] !text-white hover:!bg-zinc-800 disabled:!bg-slate-200 disabled:!text-slate-400 disabled:!shadow-none disabled:cursor-not-allowed px-10 py-6 text-base font-bold rounded-2xl w-full sm:w-auto shadow-sm transition-all" type="submit"
               [disabled]="isSubmitting()">
         <mat-spinner diameter="20" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
         <span>{{ isSubmitting() ? 'Checking in...' : 'Complete Check-In' }}</span>

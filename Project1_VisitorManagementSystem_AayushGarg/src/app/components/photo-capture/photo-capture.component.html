@@ -43,11 +43,18 @@
   <!-- Fallback: camera denied / unavailable -->
   @if (cameraMode() === 'fallback') {
     <div class="flex flex-col items-center gap-3 text-center">
-      <div class="flex items-center gap-2 text-amber-700 bg-amber-50 px-4 py-2 rounded-md border border-amber-200">
-        <mat-icon>warning</mat-icon>
-        <span class="text-sm">{{ cameraError() }} Please upload a photo instead.</span>
+      <div class="flex flex-col items-center gap-2 text-rose-700 bg-rose-50 p-4 rounded-xl border border-rose-200 w-full max-w-sm shadow-sm">
+        <div class="flex items-center gap-2">
+          <mat-icon>videocam_off</mat-icon>
+          <span class="text-sm font-semibold">{{ cameraError() }}</span>
+        </div>
+        <p class="text-xs text-rose-600 mb-2">Check browser site settings if permanently blocked.</p>
+        <div class="flex gap-2 w-full">
+          <button mat-stroked-button color="warn" type="button" class="flex-grow bg-white" (click)="retryCamera()">
+            <mat-icon class="mr-1">lock_open</mat-icon> Grant Permission
+          </button>
+        </div>
       </div>
-
       @if (!capturedPhoto()) {
         <label class="cursor-pointer">
           <div class="w-64 h-48 bg-gray-50 rounded-xl flex flex-col items-center justify-center

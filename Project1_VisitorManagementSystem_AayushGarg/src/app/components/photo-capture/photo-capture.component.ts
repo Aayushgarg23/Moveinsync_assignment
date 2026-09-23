@@ -97,6 +97,12 @@ export class PhotoCaptureComponent implements OnDestroy {
     }
   }
 
+  retryCamera(): void {
+    this.cameraError.set('');
+    this.cameraMode.set('idle');
+    this.startCamera();
+  }
+
   private stopStream(): void {
     if (this.stream) {
       this.stream.getTracks().forEach(track => track.stop());

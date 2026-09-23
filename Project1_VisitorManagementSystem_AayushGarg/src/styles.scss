@@ -23,3 +23,9 @@ html, body {
     width: 95vw !important;
   }
 }
+
+/* Modern Form Field Overrides */
+.mat-mdc-text-field-wrapper { background-color: #f8fafc !important; border-radius: 8px !important; }
+.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing { border-color: #e2e8f0 !important; border-width: 1px !important; }
+.mdc-text-field--focused .mdc-notched-outline__leading, .mdc-text-field--focused .mdc-notched-outline__notch, .mdc-text-field--focused .mdc-notched-outline__trailing { border-color: #0A0A0A !important; border-width: 1.5px !important; }
+
