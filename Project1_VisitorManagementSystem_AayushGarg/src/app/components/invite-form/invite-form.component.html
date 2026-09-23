@@ -50,8 +50,8 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Start Time</mat-label>
             <mat-select formControlName="startTime">
-              @for (time of timeSlots; track time) {
-                <mat-option [value]="time">{{ time }}</mat-option>
+              @for (time of timeSlots; track time.value) {
+                <mat-option [value]="time.value">{{ time.display }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -59,8 +59,8 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>End Time</mat-label>
             <mat-select formControlName="endTime">
-              @for (time of timeSlots; track time) {
-                <mat-option [value]="time">{{ time }}</mat-option>
+              @for (time of timeSlots; track time.value) {
+                <mat-option [value]="time.value">{{ time.display }}</mat-option>
               }
             </mat-select>
           </mat-form-field>

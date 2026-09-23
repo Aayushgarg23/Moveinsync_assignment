@@ -69,7 +69,7 @@ export class InviteFormComponent {
 
   offices = ['Bangalore HQ', 'Mumbai Office', 'Delhi NCR', 'Hyderabad Tech Park'];
 
-  timeSlots: string[] = [];
+  timeSlots: { value: string, display: string }[] = [];
 
   // ── Guest search ────────────────────────────────────────────────────
   searchQuery = signal('');
@@ -112,12 +112,19 @@ export class InviteFormComponent {
   }
 
   private generateTimeSlots(): void {
-    const slots: string[] = [];
+    const slots: { value: string, display: string }[] = [];
     for (let h = 0; h < 24; h++) {
       for (let m = 0; m < 60; m += 30) {
-        const hour = h.toString().padStart(2, '0');
-        const min = m.toString().padStart(2, '0');
-        slots.push(`${hour}:${min}`);
+        const valHour = h.toString().padStart(2, '0');
+        const valMin = m.toString().padStart(2, '0');
+        const value = `${valHour}:${valMin}`;
+        
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        let displayHour = h % 12;
+        if (displayHour === 0) displayHour = 12;
+        const display = `${displayHour}:${valMin} ${ampm}`;
+        
+        slots.push({ value, display });
       }
     }
     this.timeSlots = slots;

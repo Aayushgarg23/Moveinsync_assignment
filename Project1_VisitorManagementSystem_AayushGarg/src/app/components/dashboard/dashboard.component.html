@@ -201,7 +201,7 @@
                        [ngClass]="selectedVisitor()?.checkInTime ? 'bg-emerald-500' : 'bg-gray-300'"></div>
                   <p class="text-sm font-medium" [ngClass]="selectedVisitor()?.checkInTime ? 'text-gray-900' : 'text-gray-400'">Check-In</p>
                   <p class="text-xs text-gray-500 mt-0.5">
-                    {{ selectedVisitor()?.checkInTime ? (selectedVisitor()?.checkInTime | date:'medium') : 'Pending' }}
+                    {{ selectedVisitor()?.checkInTime ? (selectedVisitor()?.checkInTime | date:'shortTime') : 'Pending' }}
                   </p>
                 </div>
                 <!-- Check-Out Node -->
@@ -210,7 +210,7 @@
                        [ngClass]="selectedVisitor()?.checkOutTime ? 'bg-gray-500' : 'bg-gray-200'"></div>
                   <p class="text-sm font-medium" [ngClass]="selectedVisitor()?.checkOutTime ? 'text-gray-900' : 'text-gray-400'">Check-Out</p>
                   <p class="text-xs text-gray-500 mt-0.5">
-                    {{ selectedVisitor()?.checkOutTime ? (selectedVisitor()?.checkOutTime | date:'medium') : '—' }}
+                    {{ selectedVisitor()?.checkOutTime ? (selectedVisitor()?.checkOutTime | date:'shortTime') : '—' }}
                   </p>
                 </div>
               </div>
