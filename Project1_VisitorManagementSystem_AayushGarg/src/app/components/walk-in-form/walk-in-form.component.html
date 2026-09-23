@@ -1,4 +1,4 @@
-<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 mt-8 mb-8">
+<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white rounded-[32px] shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-slate-100 mt-8 mb-8">
   <div class="mb-10 text-center">
     <div class="w-16 h-16 bg-blue-50 text-[#007AFF] rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-inner border border-blue-100">
       <mat-icon style="font-size: 32px; width: 32px; height: 32px;">front_hand</mat-icon>
@@ -10,7 +10,7 @@
   <form [formGroup]="walkInForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-8">
 
     <!-- Guest Info Section -->
-    <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm">
+    <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
       <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
         <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#007AFF]">
           <mat-icon>person</mat-icon>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Visit Details Section -->
-    <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm">
+    <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
       <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
         <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#007AFF]">
           <mat-icon>assignment</mat-icon>
@@ -115,7 +115,7 @@
     </div>
 
     <!-- Photo Capture -->
-    <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm">
+    <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
       <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
         <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
           <mat-icon>photo_camera</mat-icon>
@@ -132,7 +132,7 @@
       <button mat-button type="button" class="px-8 py-6 font-medium text-gray-600 hover:bg-gray-100/80 rounded-2xl transition-colors w-full sm:w-auto" [routerLink]="['/']">
         Cancel
       </button>
-      <button mat-flat-button class="!bg-[#007AFF] !text-white hover:!bg-blue-600 disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none disabled:cursor-not-allowed px-10 py-6 text-base font-bold rounded-2xl w-full sm:w-auto shadow-sm transition-all" type="submit"
+      <button mat-flat-button class="!bg-[#007AFF] !text-white hover:!bg-blue-600 disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none disabled:cursor-not-allowed px-10 py-6 text-base font-bold rounded-2xl w-full sm:w-auto shadow-[0_12px_40px_rgb(0,0,0,0.08)] transition-all" type="submit"
               [disabled]="isSubmitting()">
         <mat-spinner diameter="20" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
         <span>{{ isSubmitting() ? 'Checking in...' : 'Complete Check-In' }}</span>

@@ -8,7 +8,7 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-  background-color: #F3F4F6 !important; 
+  background-color: #F5F5F7 !important; 
 }
 
 /* Custom Responsive Overrides */
@@ -17,24 +17,17 @@ html, body {
   .responsive-dialog { max-width: 95vw !important; width: 95vw !important; }
 }
 
-/* Apple Style Form Fields - HIGH CONTRAST */
-.mat-mdc-text-field-wrapper { 
-  background-color: #FFFFFF !important; 
-  border-radius: 12px !important; 
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important; 
+/* Fix Angular Material 18 Card & Input Variables for Apple UI */
+:root {
+  --mdc-elevated-card-container-color: #ffffff;
+  --mdc-elevated-card-container-elevation: 0px;
+  --mdc-outlined-text-field-container-shape: 12px;
+  --mdc-outlined-text-field-outline-color: #E5E7EB;
+  --mdc-outlined-text-field-hover-outline-color: #D1D5DB;
+  --mdc-outlined-text-field-focus-outline-color: #007AFF;
+  --mdc-filled-text-field-container-color: #ffffff;
 }
-.mdc-notched-outline__leading, 
-.mdc-notched-outline__notch, 
-.mdc-notched-outline__trailing { 
-  border-color: #D1D5DB !important; /* Visible gray border */
-  border-width: 1px !important; 
-}
-.mdc-text-field--focused .mdc-notched-outline__leading, 
-.mdc-text-field--focused .mdc-notched-outline__notch, 
-.mdc-text-field--focused .mdc-notched-outline__trailing { 
-  border-color: #007AFF !important; 
-  border-width: 2px !important; 
-}
+
 .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-flat-button, .mat-mdc-stroked-button {
   border-radius: 9999px !important;
 }

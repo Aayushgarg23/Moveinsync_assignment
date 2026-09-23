@@ -1,4 +1,4 @@
-<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 mt-8 mb-8">
+<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white rounded-[32px] shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-slate-100 mt-8 mb-8">
   <div class="mb-12">
     <h2 class="text-[32px] font-extrabold text-gray-900 mb-2 tracking-tight">Invite Visitor</h2>
     <p class="text-gray-500 text-base">Schedule a visit. Pre-invited guests are instantly approved and can check in with their QR code.</p>
@@ -137,7 +137,7 @@
           } @else {
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ addedGuests().length }} Guest(s)</p>
             @for (guest of addedGuests(); track guest.id) {
-              <div class="flex items-center justify-between p-3 bg-white border border-slate-200/80 rounded-2xl shadow-sm group hover:border-slate-300 transition-colors">
+              <div class="flex items-center justify-between p-3 bg-white border border-slate-200/80 rounded-2xl shadow-[0_12px_40px_rgb(0,0,0,0.08)] group hover:border-slate-300 transition-colors">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-inner"
                        [ngClass]="getAvatarClass(guest.name)">
@@ -163,7 +163,7 @@
       <button mat-button type="button" class="px-8 py-6 font-medium text-slate-600 hover:bg-slate-100/80 rounded-2xl transition-colors" [routerLink]="['/']">
         Cancel
       </button>
-      <button mat-flat-button class="px-10 py-6 text-base font-bold rounded-2xl transition-all shadow-sm
+      <button mat-flat-button class="px-10 py-6 text-base font-bold rounded-2xl transition-all shadow-[0_12px_40px_rgb(0,0,0,0.08)]
              !bg-[#007AFF] !text-white hover:!bg-blue-600 hover:shadow-md
              disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none disabled:cursor-not-allowed" 
              type="submit"
