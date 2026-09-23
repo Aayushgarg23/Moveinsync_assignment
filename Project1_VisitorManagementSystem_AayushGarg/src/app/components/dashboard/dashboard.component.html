@@ -1,12 +1,12 @@
 <div class="flex flex-col lg:flex-row gap-6 h-auto md:h-[calc(100vh-130px)]">
   
   <!-- Left: Main List Area -->
-  <div class="flex-grow lg:w-[70%] flex flex-col min-h-0 bg-[#F4F6F9]/60 rounded-2xl sm:rounded-3xl p-3 sm:p-6 border border-white/40">
+  <div class="flex-grow lg:w-[70%] flex flex-col md:min-h-0 bg-[#F4F6F9]/60 rounded-none sm:rounded-3xl p-4 sm:p-6 sm:border border-white/40">
     <div class="flex items-center justify-between mb-6 shrink-0">
       <h2 class="text-xl font-bold text-gray-900 tracking-tight">Today's Visitors</h2>
     </div>
 
-    <div class="flex-grow overflow-visible md:overflow-y-auto min-h-0 pr-0 md:pr-2">
+    <div class="flex-grow overflow-visible md:overflow-y-auto md:min-h-0 pr-0 md:pr-2">
             <!-- Table Header -->
       <div class="grid grid-cols-[1fr_auto] sm:grid-cols-3 lg:grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-2 sm:gap-4 px-2 sm:px-4 py-2 sm:py-3 mb-2 text-[11px] sm:text-[12px] font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200/50">
         <div class="flex items-center gap-1">Visitor <mat-icon style="font-size: 14px; width: 14px; height: 14px;">expand_more</mat-icon></div>
@@ -67,7 +67,7 @@
   </div>
 
   <!-- Right: Profile Sidebar -->
-  <div class="hidden lg:flex flex-col w-[30%] min-h-0 bg-white/70 backdrop-blur-md rounded-2xl sm:rounded-3xl p-3 sm:p-6 border border-white/50 shadow-sm shrink-0">
+  <div class="hidden lg:flex flex-col w-[30%] min-h-0 bg-white/70 backdrop-blur-md rounded-none sm:rounded-3xl p-4 sm:p-6 border border-white/50 shadow-sm shrink-0">
     <div class="flex items-center justify-between mb-8 shrink-0 border-b border-gray-200 pb-4">
       <h2 class="text-lg font-bold text-gray-900 tracking-tight">Visitor Profile</h2>
       <div class="flex gap-2">
@@ -77,7 +77,7 @@
     </div>
 
     @if (selectedVisitor()) {
-      <div class="flex-grow overflow-visible md:overflow-y-auto min-h-0 pr-0 md:pr-2 pb-6 space-y-6">
+      <div class="flex-grow overflow-visible md:overflow-y-auto md:min-h-0 pr-0 md:pr-2 pb-6 space-y-6">
         
                 <!-- Profile Header -->
         <div class="flex items-center gap-4">
