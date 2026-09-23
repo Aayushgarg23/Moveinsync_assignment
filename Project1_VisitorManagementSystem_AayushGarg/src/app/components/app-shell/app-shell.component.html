@@ -1,76 +1,54 @@
-<div class="min-h-screen bg-[#F5F5F7] flex flex-col font-sans text-gray-900">
-  <!-- Apple-Style Frosted Header -->
-  <header class="h-16 bg-white shadow-sm border-b border-black/5 flex items-center justify-between px-4 md:px-6 lg:px-8 shrink-0 relative z-20 shadow-sm">
-    
-    <!-- Left: Logo & Mobile Hamburger -->
-    <div class="flex items-center gap-4">
-      <!-- Mobile Menu Hamburger - ONLY visible on mobile -->
-      @if (isMobile()) {
-        <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="text-gray-600 hover:text-black hover:bg-black/5 transition-colors">
-          <mat-icon>menu</mat-icon>
-        </button>
+﻿<div class="min-h-screen flex flex-col font-sans text-gray-900 bg-transparent">
+  <!-- Floating Header Navbar -->
+  <div class="px-6 pt-6 shrink-0 relative z-20">
+    <header class="h-[72px] bg-white rounded-[24px] shadow-[0_2px_12px_rgb(0,0,0,0.03)] border border-white/50 flex items-center justify-between px-6">
+      
+      <!-- Left: Logo -->
+      <div class="flex items-center gap-2 select-none cursor-pointer group" [routerLink]="['/']">
+        <svg class="w-8 h-8 text-black" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/>
+        </svg>
+        <span class="text-[20px] font-bold tracking-tight text-gray-900 hidden sm:inline-block">VisitorManager</span>
+      </div>
+
+      <!-- Center: Links -->
+      @if (!isMobile()) {
+        <nav class="flex items-center gap-6 h-full absolute left-1/2 transform -translate-x-1/2">
+          @for (item of navItems; track item.route) {
+            <a [routerLink]="item.route" 
+               class="relative h-full flex items-center text-[15px] font-medium transition-colors"
+               [ngClass]="isActive(item.route) ? 'text-[#007AFF]' : 'text-gray-600 hover:text-black'">
+               {{ item.label }}
+               <!-- Active Indicator (bottom line) -->
+               @if (isActive(item.route)) {
+                 <div class="absolute bottom-0 left-0 right-0 h-[3px] bg-[#007AFF] rounded-t-full"></div>
+               }
+            </a>
+          }
+        </nav>
       }
 
-      <!-- Logo -->
-      <div class="flex items-center gap-2 select-none cursor-pointer group" [routerLink]="['/']">
-        <!-- Minimal Geometric Badge -->
-        <svg class="w-7 h-7 text-[#007AFF] group-hover:scale-105 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="currentColor" fill-opacity="0.1" />
-          <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" />
-        </svg>
-        <span class="text-[20px] font-semibold tracking-tight text-gray-900 hidden sm:inline-block">MoveInSync</span>
+      <!-- Right: Profile & Action -->
+      <div class="flex items-center gap-4">
+        <!-- Profile -->
+        <div class="hidden md:flex items-center gap-3">
+          <img src="https://i.pravatar.cc/100?img=5" class="w-10 h-10 rounded-full object-cover">
+          <div class="flex flex-col">
+            <span class="text-sm font-bold text-gray-900 leading-none mb-1">Sarah Jenkins</span>
+            <span class="text-[11px] text-gray-500 font-medium leading-none">HR Director</span>
+          </div>
+        </div>
+        <!-- Check-in Button -->
+        <button mat-flat-button [routerLink]="['/register/walk-in']" class="!bg-[#007AFF] !text-white !rounded-xl !px-5 !py-2 !h-10 text-[14px] font-semibold tracking-wide hover:!bg-blue-600 shadow-sm transition-colors">
+          Check-In New
+        </button>
       </div>
-    </div>
 
-    <!-- Center/Left-of-center: Desktop Nav Links - ONLY visible on desktop -->
-    @if (!isMobile()) {
-      <nav class="flex items-center h-full gap-1 absolute left-1/2 transform -translate-x-1/2">
-        @for (item of navItems; track item.route) {
-          <a [routerLink]="item.route" 
-             class="relative h-8 px-4 rounded-full flex items-center text-sm font-medium transition-all duration-200"
-             [ngClass]="isActive(item.route) ? 'bg-black/5 text-gray-900' : 'text-gray-500 hover:text-gray-900 hover:bg-black/5'">
-             {{ item.label }}
-          </a>
-        }
-      </nav>
-    }
-
-    <!-- Right: Notifications & Profile placeholder -->
-    <div class="flex items-center gap-4">
-      <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="text-gray-500 hover:text-gray-900 transition-colors">
-        <mat-icon>notifications</mat-icon>
-      </button>
-      <!-- Premium Avatar Placeholder -->
-      <div class="hidden sm:flex w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 text-white items-center justify-center text-xs font-bold shadow-inner cursor-pointer hover:opacity-90 transition-opacity">
-        AG
-      </div>
-    </div>
-
-  </header>
+    </header>
+  </div>
 
   <!-- Main Content Area -->
-  <main class="flex-1 w-full max-w-[1600px] mx-auto">
+  <main class="flex-1 w-full max-w-[1500px] mx-auto pt-6 px-6 pb-12">
     <router-outlet></router-outlet>
   </main>
 </div>
-
-<!-- Mobile Dropdown Menu -->
-<mat-menu #mobileMenu="matMenu" class="min-w-[240px] !bg-zinc-900 border border-zinc-800">
-  @for (item of navItems; track item.route) {
-    <a mat-menu-item [routerLink]="item.route" [ngClass]="isActive(item.route) ? 'text-white bg-zinc-800' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'">
-      <mat-icon [ngClass]="isActive(item.route) ? 'text-white' : 'text-zinc-500'">{{ item.icon }}</mat-icon>
-      <span>{{ item.label }}</span>
-    </a>
-  }
-</mat-menu>
-
-<!-- Notifications Dropdown Menu -->
-<mat-menu #notifMenu="matMenu" yPosition="below" class="w-72 mt-2 rounded-xl !bg-zinc-900 border border-zinc-800">
-  <div class="p-6 flex flex-col items-center justify-center text-center outline-none">
-    <div class="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center mb-3 border border-zinc-700">
-      <mat-icon class="text-zinc-500">notifications_off</mat-icon>
-    </div>
-    <h3 class="text-sm font-medium text-white mb-1">No new notifications</h3>
-    <p class="text-xs text-zinc-400">You're all caught up! Real-time alerts will appear here.</p>
-  </div>
-</mat-menu>
