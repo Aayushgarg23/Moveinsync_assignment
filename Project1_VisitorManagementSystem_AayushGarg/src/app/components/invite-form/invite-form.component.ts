@@ -196,7 +196,7 @@ export class InviteFormComponent {
         phone: guest.phone,
         companyName: '',
         role: '',
-        photoUrl: '',
+        photoUrl: this.generateInitialsAvatar(guest.name),
         visitType: formValue.visitType,
         purpose: formValue.eventTitle,
         hostId: hostId,
@@ -254,6 +254,29 @@ export class InviteFormComponent {
       });
     }
   }
+
+  
+  private generateInitialsAvatar(name: string): string {
+    const names = (name || '').trim().split(' ');
+    let initials = '?';
+    if (names.length === 1) {
+      initials = names[0].charAt(0).toUpperCase();
+    } else if (names.length > 1) {
+      initials = names[0].charAt(0).toUpperCase() + names[names.length - 1].charAt(0).toUpperCase();
+    }
+
+    const colors = ['#f87171', '#fb923c', '#fbbf24', '#a3e635', '#4ade80', '#2dd4bf', '#38bdf8', '#818cf8', '#a78bfa', '#e879f9', '#fb7185'];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = colors[Math.abs(hash) % colors.length];
+
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="' + color + '"/><text x="50" y="50" font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="40" font-weight="600" fill="#ffffff" text-anchor="middle" dominant-baseline="central" dy=".1em">' + initials + '</text></svg>';
+    
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+  }
+
 
   getInitials(name: string): string {
     if (!name) return '';
