@@ -17,17 +17,42 @@ html, body {
   .responsive-dialog { max-width: 95vw !important; width: 95vw !important; }
 }
 
-/* Fix Angular Material 18 Card & Input Variables for Apple UI */
+/* Material 3 Token Overrides for Apple Aesthetic */
 :root {
   --mdc-elevated-card-container-color: #ffffff;
   --mdc-elevated-card-container-elevation: 0px;
-  --mdc-outlined-text-field-container-shape: 12px;
-  --mdc-outlined-text-field-outline-color: #E5E7EB;
-  --mdc-outlined-text-field-hover-outline-color: #D1D5DB;
-  --mdc-outlined-text-field-focus-outline-color: #007AFF;
+  --mdc-outlined-text-field-container-shape: 10px;
+  --mdc-outlined-text-field-outline-color: #D1D5DB; /* Tailwind gray-300 */
+  --mdc-outlined-text-field-hover-outline-color: #9CA3AF; /* Tailwind gray-400 */
+  --mdc-outlined-text-field-focus-outline-color: #007AFF; /* Apple Blue */
   --mdc-filled-text-field-container-color: #ffffff;
+  --mat-menu-container-shape: 12px;
+  --mdc-dialog-container-shape: 16px;
 }
 
+/* Force text field background to white */
+.mat-mdc-text-field-wrapper { 
+  background-color: #FFFFFF !important; 
+}
+
+/* Pill buttons */
 .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-flat-button, .mat-mdc-stroked-button {
   border-radius: 9999px !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* Scrollbar styling for elegance */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
 }

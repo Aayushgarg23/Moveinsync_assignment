@@ -1,19 +1,19 @@
-<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white rounded-[32px] shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-slate-100 mt-8 mb-8">
-  <div class="mb-12">
-    <h2 class="text-[32px] font-extrabold text-gray-900 mb-2 tracking-tight">Invite Visitor</h2>
-    <p class="text-gray-500 text-base">Schedule a visit. Pre-invited guests are instantly approved and can check in with their QR code.</p>
+<div class="max-w-[1000px] mx-auto p-6 md:p-8 min-h-[calc(100vh-64px)]">
+  <div class="mb-10">
+    <h2 class="text-[28px] font-bold text-gray-900 mb-2 tracking-tight">Invite Visitor</h2>
+    <p class="text-gray-500 text-sm">Schedule a visit. Pre-invited guests are instantly approved and can check in with their QR code.</p>
   </div>
 
   <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 lg:gap-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-8">
       
       <!-- Left Column: Visit Details -->
-      <div class="flex flex-col gap-6">
-        <div class="flex items-center gap-2 border-b border-slate-200/60 pb-3 mb-2">
-          <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">event</mat-icon>
+      <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm flex flex-col gap-6">
+        <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-2">
+          <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#007AFF]">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">event</mat-icon>
           </div>
-          <h3 class="text-lg font-bold text-slate-800">Visit Details</h3>
+          <h3 class="text-lg font-semibold text-gray-800">Visit Details</h3>
         </div>
         
         <!-- Event Title -->
@@ -23,7 +23,7 @@
         </mat-form-field>
 
         <!-- Type of Visit + Office -->
-        <div class="grid grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Type of Visit</mat-label>
             <mat-select formControlName="visitType">
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Date + Start/End Time -->
-        <div class="grid grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="date">
@@ -80,45 +80,45 @@
       </div>
 
       <!-- Right Column: Guests -->
-      <div class="flex flex-col gap-6">
-        <div class="flex items-center gap-2 border-b border-slate-200/60 pb-3 mb-2">
+      <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm flex flex-col gap-6">
+        <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-2">
           <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px;">group_add</mat-icon>
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">group_add</mat-icon>
           </div>
-          <h3 class="text-lg font-bold text-slate-800">Add Guests</h3>
+          <h3 class="text-lg font-semibold text-gray-800">Add Guests</h3>
         </div>
         
         <!-- Guest Search -->
         <div class="relative">
           <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
-            <mat-icon matPrefix class="text-slate-400 mr-2">search</mat-icon>
+            <mat-icon matPrefix class="text-gray-400 mr-2">search</mat-icon>
             <input matInput [value]="searchQuery()" (input)="onSearchInput($event)"
                    placeholder="Search by name or email...">
           </mat-form-field>
 
           @if (isSearching()) {
-            <div class="absolute top-14 left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-lg p-3 z-10 flex items-center gap-2 text-slate-500 text-sm">
+            <div class="absolute top-14 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg p-3 z-20 flex items-center gap-2 text-gray-500 text-sm">
               <mat-spinner diameter="16"></mat-spinner> Searching...
             </div>
           }
 
           @if (searchResults().length > 0) {
-            <div class="absolute top-14 left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
+            <div class="absolute top-14 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto z-20">
               @for (result of searchResults(); track result.id) {
-                <div class="flex items-center justify-between px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-0"
+                <div class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
                      (click)="addGuest(result)">
                   <div class="flex flex-col">
-                    <span class="font-semibold text-slate-900">{{ result.name }}</span>
-                    <span class="text-xs text-slate-500">{{ result.email }}</span>
+                    <span class="font-medium text-gray-900 text-sm">{{ result.name }}</span>
+                    <span class="text-xs text-gray-500">{{ result.email }}</span>
                   </div>
-                  <mat-icon class="text-indigo-600">add_circle</mat-icon>
+                  <mat-icon class="text-[#007AFF]" style="font-size: 20px; width: 20px; height: 20px;">add_circle</mat-icon>
                 </div>
               }
             </div>
           }
           
           @if (searchQuery().length > 0 && searchResults().length === 0 && !isSearching()) {
-            <div class="absolute top-14 left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-lg p-4 z-10 text-center text-slate-500 text-sm">
+            <div class="absolute top-14 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-20 text-center text-gray-500 text-sm">
               No results found for "{{ searchQuery() }}"
             </div>
           }
@@ -127,29 +127,29 @@
         <!-- Added Guests List -->
         <div class="flex-grow flex flex-col gap-3 mt-1">
           @if (addedGuests().length === 0) {
-            <div class="flex flex-col items-center justify-center p-8 bg-white/50 rounded-2xl border border-dashed border-slate-300 h-full min-h-[200px]">
-              <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-3">
-                <mat-icon class="text-slate-400">person_add</mat-icon>
+            <div class="flex flex-col items-center justify-center p-6 bg-gray-50/50 rounded-xl border border-dashed border-gray-200 h-full min-h-[160px]">
+              <div class="w-10 h-10 bg-white border border-gray-100 rounded-full flex items-center justify-center mb-3 shadow-sm">
+                <mat-icon class="text-gray-400" style="font-size: 20px; width: 20px; height: 20px;">person_add</mat-icon>
               </div>
-              <p class="text-sm text-slate-600 font-medium">No guests added</p>
-              <p class="text-xs text-slate-400 mt-1">Search to add guests to this invite</p>
+              <p class="text-sm text-gray-600 font-medium">No guests added</p>
+              <p class="text-xs text-gray-400 mt-1">Search to add guests</p>
             </div>
           } @else {
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ addedGuests().length }} Guest(s)</p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ addedGuests().length }} Guest(s)</p>
             @for (guest of addedGuests(); track guest.id) {
-              <div class="flex items-center justify-between p-3 bg-white border border-slate-200/80 rounded-2xl shadow-[0_12px_40px_rgb(0,0,0,0.08)] group hover:border-slate-300 transition-colors">
+              <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl shadow-sm group hover:border-gray-300 transition-colors">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-inner"
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center font-medium text-xs"
                        [ngClass]="getAvatarClass(guest.name)">
                     {{ getInitials(guest.name) }}
                   </div>
                   <div class="flex flex-col">
-                    <span class="font-semibold text-slate-900">{{ guest.name }}</span>
-                    <span class="text-xs text-slate-500">{{ guest.email }}</span>
+                    <span class="font-medium text-gray-900 text-sm">{{ guest.name }}</span>
+                    <span class="text-xs text-gray-500">{{ guest.email }}</span>
                   </div>
                 </div>
-                <button mat-icon-button type="button" class="text-slate-300 hover:text-rose-500 transition-colors" (click)="removeGuest(guest.id)">
-                  <mat-icon>close</mat-icon>
+                <button mat-icon-button type="button" class="text-gray-400 hover:text-rose-500 transition-colors" (click)="removeGuest(guest.id)">
+                  <mat-icon style="font-size: 18px; width: 18px; height: 18px;">close</mat-icon>
                 </button>
               </div>
             }
@@ -159,16 +159,16 @@
     </div>
 
     <!-- Actions Footer -->
-    <div class="flex flex-col sm:flex-row justify-end gap-4 pt-10 mt-10 border-t border-slate-200/60">
-      <button mat-button type="button" class="px-8 py-6 font-medium text-slate-600 hover:bg-slate-100/80 rounded-2xl transition-colors" [routerLink]="['/']">
+    <div class="flex flex-col sm:flex-row justify-end gap-3 pt-8 mt-8 border-t border-gray-200/60">
+      <button mat-button type="button" class="px-6 py-2 font-medium text-gray-600 hover:bg-gray-100 rounded-full transition-colors" [routerLink]="['/']">
         Cancel
       </button>
-      <button mat-flat-button class="px-10 py-6 text-base font-bold rounded-2xl transition-all shadow-[0_12px_40px_rgb(0,0,0,0.08)]
-             !bg-[#007AFF] !text-white hover:!bg-blue-600 hover:shadow-md
-             disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none disabled:cursor-not-allowed" 
+      <button mat-flat-button class="px-8 py-2 text-sm font-semibold rounded-full shadow-sm transition-all
+             !bg-[#007AFF] !text-white hover:!bg-blue-600
+             disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none" 
              type="submit"
              [disabled]="isSubmitting() || inviteForm.invalid || addedGuests().length === 0">
-        <mat-spinner diameter="18" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
+        <mat-spinner diameter="16" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
         <span>{{ isSubmitting() ? 'Sending...' : 'Send Invitation' }}</span>
       </button>
     </div>
