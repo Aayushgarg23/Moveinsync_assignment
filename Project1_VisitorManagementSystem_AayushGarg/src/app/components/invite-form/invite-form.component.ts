@@ -235,4 +235,26 @@ export class InviteFormComponent {
       });
     }
   }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const parts = name.split(' ');
+    if (parts.length > 1) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return (name.substring(0, 2)).toUpperCase();
+  }
+
+  getAvatarClass(name: string): string {
+    if (!name) return 'bg-gray-100 text-gray-700';
+    const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const colors = [
+      'bg-indigo-100 text-indigo-700',
+      'bg-emerald-100 text-emerald-700',
+      'bg-amber-100 text-amber-700',
+      'bg-rose-100 text-rose-700',
+      'bg-blue-100 text-blue-700'
+    ];
+    return colors[hash % colors.length];
+  }
 }
