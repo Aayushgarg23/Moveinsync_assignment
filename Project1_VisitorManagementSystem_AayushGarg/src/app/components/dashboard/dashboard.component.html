@@ -1,4 +1,4 @@
-<div class="h-[calc(100vh-64px)] p-6 bg-slate-50/50 flex flex-col">
+<div class="h-[calc(100vh-64px)] p-6 md:p-8 flex flex-col max-w-[1600px] mx-auto">
   
   <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 flex-shrink-0 gap-4">
     <div>
@@ -36,22 +36,22 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 flex-shrink-0">
-    <mat-card class="!bg-white !rounded-2xl border border-slate-200/60 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <mat-card class="!bg-white/70 backdrop-blur-2xl !rounded-[24px] border border-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
       <mat-card-content class="p-6 flex items-center justify-between">
         <div>
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Total Visitors</p>
-          <p class="text-3xl font-bold text-slate-900 tracking-tight">{{ totalCount() }}</p>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1">Total Visitors</p>
+          <p class="text-3xl font-bold text-gray-900 tracking-tight">{{ totalCount() }}</p>
         </div>
-        <div class="w-12 h-12 bg-indigo-50/80 rounded-2xl flex items-center justify-center text-indigo-600 shadow-inner">
+        <div class="w-12 h-12 bg-blue-50/80 rounded-2xl flex items-center justify-center text-[#007AFF] shadow-inner">
           <mat-icon>people</mat-icon>
         </div>
       </mat-card-content>
     </mat-card>
     
-    <mat-card class="!bg-white !rounded-2xl border border-slate-200/60 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <mat-card class="!bg-white/70 backdrop-blur-2xl !rounded-[24px] border border-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
       <mat-card-content class="p-6 flex items-center justify-between">
         <div>
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Checked-In</p>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1">Checked-In</p>
           <p class="text-3xl font-bold text-emerald-600 tracking-tight">{{ checkedInCount() }}</p>
         </div>
         <div class="w-12 h-12 bg-emerald-50/80 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner">
@@ -60,10 +60,10 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="!bg-white !rounded-2xl border border-slate-200/60 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <mat-card class="!bg-white/70 backdrop-blur-2xl !rounded-[24px] border border-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
       <mat-card-content class="p-6 flex items-center justify-between">
         <div>
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Overstays</p>
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1">Overstays</p>
           <p class="text-3xl font-bold text-rose-600 tracking-tight">{{ overstayCount() }}</p>
         </div>
         <div class="w-12 h-12 bg-rose-50/80 rounded-2xl flex items-center justify-center text-rose-600 shadow-inner">
@@ -76,13 +76,13 @@
   <div class="flex-grow flex flex-col lg:flex-row gap-6 overflow-hidden">
     
     <!-- Left: Table (65%) -->
-    <div class="flex-grow lg:w-2/3 bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden flex flex-col">
+    <div class="flex-grow lg:w-2/3 bg-white/70 backdrop-blur-2xl rounded-[32px] shadow-sm border border-white overflow-hidden flex flex-col">
       <div class="overflow-x-auto flex-grow">
-        <table mat-table [dataSource]="filteredVisitors()" class="w-full">
+        <table mat-table [dataSource]="filteredVisitors()" class="w-full bg-transparent">
           <!-- Name Column -->
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-500 uppercase tracking-wider text-xs py-4 px-2"> Visitor </th>
-            <td mat-cell *matCellDef="let element" class="py-3 px-2">
+            <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-500 uppercase tracking-wider text-xs py-4 px-2 !bg-white/50 border-b border-gray-100"> Visitor </th>
+            <td mat-cell *matCellDef="let element" class="py-3 px-2 border-b border-gray-100">
               <div class="flex items-center gap-3 cursor-pointer" (click)="openGuestDetail(element)">
                 <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-inner"
                      [ngClass]="getAvatarClass(element.name)">
@@ -101,13 +101,13 @@
 
           <!-- Visit Type Column -->
           <ng-container matColumnDef="visitType">
-            <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-500 uppercase tracking-wider text-xs py-4 px-2"> Type </th>
+            <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-500 uppercase tracking-wider text-xs py-4 px-2 !bg-white/50 border-b border-gray-100"> Type </th>
             <td mat-cell *matCellDef="let element" class="text-slate-600 font-medium py-3 px-2"> {{ element.visitType }} </td>
           </ng-container>
 
           <!-- Entry Time Column -->
           <ng-container matColumnDef="checkInTime">
-            <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-500 uppercase tracking-wider text-xs py-4 px-2"> Entry Time </th>
+            <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-500 uppercase tracking-wider text-xs py-4 px-2 !bg-white/50 border-b border-gray-100"> Entry Time </th>
             <td mat-cell *matCellDef="let element" class="text-slate-600 text-sm py-3 px-2"> 
               {{ element.checkInTime ? (element.checkInTime | date:'shortTime') : '-' }} 
             </td>
@@ -115,7 +115,7 @@
 
           <!-- Exit Time Column -->
           <ng-container matColumnDef="checkOutTime">
-            <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-500 uppercase tracking-wider text-xs py-4 px-2"> Exit Time </th>
+            <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-500 uppercase tracking-wider text-xs py-4 px-2 !bg-white/50 border-b border-gray-100"> Exit Time </th>
             <td mat-cell *matCellDef="let element" class="text-slate-600 text-sm py-3 px-2"> 
               {{ element.checkOutTime ? (element.checkOutTime | date:'shortTime') : '-' }} 
             </td>
@@ -123,8 +123,8 @@
 
           <!-- Status Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-500 uppercase tracking-wider text-xs py-4 px-2"> Status </th>
-            <td mat-cell *matCellDef="let element" class="py-3 px-2">
+            <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-500 uppercase tracking-wider text-xs py-4 px-2 !bg-white/50 border-b border-gray-100"> Status </th>
+            <td mat-cell *matCellDef="let element" class="py-3 px-2 border-b border-gray-100">
               <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase border shadow-[0_1px_2px_rgba(0,0,0,0.02)]" [ngClass]="getStatusClass(element.status)">
                 {{ element.status | visitorStatus }}
               </span>
@@ -154,7 +154,7 @@
 
     <!-- Right: Permanent Side Panel (35%) - Hidden on mobile/tablet -->
     <!-- Right: Permanent Side Panel (35%) - Hidden on mobile/tablet -->
-    <div class="hidden lg:flex lg:w-1/3 bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden flex-col h-full shrink-0">
+    <div class="hidden lg:flex lg:w-1/3 bg-white/70 backdrop-blur-2xl rounded-[32px] shadow-sm border border-white overflow-hidden flex-col h-full shrink-0">
       
       @if (!selectedVisitor()) {
         <!-- Placeholder Empty State -->

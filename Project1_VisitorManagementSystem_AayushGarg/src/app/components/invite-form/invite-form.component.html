@@ -1,7 +1,7 @@
-<div class="max-w-6xl mx-auto p-6 md:p-10 bg-[#F8FAFC] min-h-[calc(100vh-64px)]">
+<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white/70 backdrop-blur-2xl rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white mt-8 mb-8">
   <div class="mb-12">
-    <h2 class="text-[32px] font-extrabold text-slate-900 mb-2 tracking-tight">Invite Visitor</h2>
-    <p class="text-slate-500 text-base">Schedule a visit. Pre-invited guests are instantly approved and can check in with their QR code.</p>
+    <h2 class="text-[32px] font-extrabold text-gray-900 mb-2 tracking-tight">Invite Visitor</h2>
+    <p class="text-gray-500 text-base">Schedule a visit. Pre-invited guests are instantly approved and can check in with their QR code.</p>
   </div>
 
   <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
@@ -164,8 +164,8 @@
         Cancel
       </button>
       <button mat-flat-button class="px-10 py-6 text-base font-bold rounded-2xl transition-all shadow-sm
-             !bg-[#0A0A0A] !text-white hover:!bg-zinc-800 hover:shadow-md
-             disabled:!bg-slate-200 disabled:!text-slate-400 disabled:!shadow-none disabled:cursor-not-allowed" 
+             !bg-[#007AFF] !text-white hover:!bg-blue-600 hover:shadow-md
+             disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none disabled:cursor-not-allowed" 
              type="submit"
              [disabled]="isSubmitting() || inviteForm.invalid || addedGuests().length === 0">
         <mat-spinner diameter="18" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>

@@ -1,24 +1,24 @@
-<div class="min-h-screen bg-slate-50 flex flex-col font-sans">
-  <!-- Ultra-Premium Dark Header -->
-  <header class="h-16 bg-[#0A0A0A] border-b border-white/10 flex items-center justify-between px-4 md:px-6 lg:px-8 shrink-0 relative z-20">
+<div class="min-h-screen bg-[#F5F5F7] flex flex-col font-sans text-gray-900">
+  <!-- Apple-Style Frosted Header -->
+  <header class="h-16 bg-white/70 backdrop-blur-xl border-b border-black/5 flex items-center justify-between px-4 md:px-6 lg:px-8 shrink-0 relative z-20 shadow-sm">
     
     <!-- Left: Logo & Mobile Hamburger -->
     <div class="flex items-center gap-4">
       <!-- Mobile Menu Hamburger - ONLY visible on mobile -->
       @if (isMobile()) {
-        <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="text-zinc-400 hover:text-white hover:bg-white/10 transition-colors">
+        <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="text-gray-600 hover:text-black hover:bg-black/5 transition-colors">
           <mat-icon>menu</mat-icon>
         </button>
       }
 
       <!-- Logo -->
       <div class="flex items-center gap-2 select-none cursor-pointer group" [routerLink]="['/']">
-        <!-- Minimal Geometric Badge (White/Zinc) -->
-        <svg class="w-7 h-7 text-white group-hover:scale-105 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Minimal Geometric Badge -->
+        <svg class="w-7 h-7 text-[#007AFF] group-hover:scale-105 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="currentColor" fill-opacity="0.1" />
           <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" />
         </svg>
-        <span class="text-[20px] font-bold tracking-tight text-white hidden sm:inline-block">MoveInSync</span>
+        <span class="text-[20px] font-semibold tracking-tight text-gray-900 hidden sm:inline-block">MoveInSync</span>
       </div>
     </div>
 
@@ -27,8 +27,8 @@
       <nav class="flex items-center h-full gap-1 absolute left-1/2 transform -translate-x-1/2">
         @for (item of navItems; track item.route) {
           <a [routerLink]="item.route" 
-             class="relative h-8 px-4 rounded-md flex items-center text-sm font-medium transition-all duration-200"
-             [ngClass]="isActive(item.route) ? 'bg-white/10 text-white' : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/5'">
+             class="relative h-8 px-4 rounded-full flex items-center text-sm font-medium transition-all duration-200"
+             [ngClass]="isActive(item.route) ? 'bg-black/5 text-gray-900' : 'text-gray-500 hover:text-gray-900 hover:bg-black/5'">
              {{ item.label }}
           </a>
         }
@@ -37,11 +37,11 @@
 
     <!-- Right: Notifications & Profile placeholder -->
     <div class="flex items-center gap-4">
-      <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="text-zinc-400 hover:text-white transition-colors">
+      <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="text-gray-500 hover:text-gray-900 transition-colors">
         <mat-icon>notifications</mat-icon>
       </button>
       <!-- Premium Avatar Placeholder -->
-      <div class="hidden sm:flex w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white items-center justify-center text-xs font-bold shadow-inner cursor-pointer hover:opacity-90 transition-opacity ring-2 ring-[#0A0A0A] ring-offset-1 ring-offset-zinc-800">
+      <div class="hidden sm:flex w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 text-white items-center justify-center text-xs font-bold shadow-inner cursor-pointer hover:opacity-90 transition-opacity">
         AG
       </div>
     </div>

@@ -24,8 +24,25 @@ html, body {
   }
 }
 
-/* Modern Form Field Overrides */
-.mat-mdc-text-field-wrapper { background-color: #f8fafc !important; border-radius: 8px !important; }
-.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing { border-color: #e2e8f0 !important; border-width: 1px !important; }
-.mdc-text-field--focused .mdc-notched-outline__leading, .mdc-text-field--focused .mdc-notched-outline__notch, .mdc-text-field--focused .mdc-notched-outline__trailing { border-color: #0A0A0A !important; border-width: 1.5px !important; }
+/* Modern Apple-style Overrides */
+body { 
+  background-color: #F5F5F7 !important; 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+.mat-mdc-text-field-wrapper { 
+  background-color: #FFFFFF !important; 
+  border-radius: 12px !important; 
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important; 
+}
+.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing { 
+  border-color: rgba(0,0,0,0.05) !important; 
+  border-width: 1px !important; 
+}
+.mdc-text-field--focused .mdc-notched-outline__leading, .mdc-text-field--focused .mdc-notched-outline__notch, .mdc-text-field--focused .mdc-notched-outline__trailing { 
+  border-color: #007AFF !important; 
+  border-width: 2px !important; 
+}
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-flat-button, .mat-mdc-stroked-button {
+  border-radius: 9999px !important;
+}
 

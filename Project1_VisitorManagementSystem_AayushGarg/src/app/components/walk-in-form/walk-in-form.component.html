@@ -1,21 +1,21 @@
-<div class="max-w-4xl mx-auto p-6 md:p-10 bg-[#F8FAFC] min-h-[calc(100vh-64px)]">
+<div class="max-w-[1200px] mx-auto p-8 md:p-12 bg-white/70 backdrop-blur-2xl rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white mt-8 mb-8">
   <div class="mb-10 text-center">
-    <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-inner border border-indigo-200">
+    <div class="w-16 h-16 bg-blue-50 text-[#007AFF] rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-inner border border-blue-100">
       <mat-icon style="font-size: 32px; width: 32px; height: 32px;">front_hand</mat-icon>
     </div>
-    <h2 class="text-[32px] font-extrabold text-slate-900 mb-2 tracking-tight">Walk-in Check-in</h2>
-    <p class="text-slate-500 text-base max-w-lg mx-auto">Register an unscheduled visitor directly at the front desk. They will be checked in immediately without requiring prior host approval.</p>
+    <h2 class="text-[32px] font-extrabold text-gray-900 mb-2 tracking-tight">Walk-in Check-in</h2>
+    <p class="text-gray-500 text-base max-w-lg mx-auto">Register an unscheduled visitor directly at the front desk. They will be checked in immediately without requiring prior host approval.</p>
   </div>
 
   <form [formGroup]="walkInForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-8">
 
     <!-- Guest Info Section -->
-    <div class="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-sm">
-      <div class="flex items-center gap-3 border-b border-slate-200/60 pb-4 mb-6">
-        <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+    <div class="bg-white/50 rounded-[24px] p-8 border border-white shadow-sm">
+      <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#007AFF]">
           <mat-icon>person</mat-icon>
         </div>
-        <h3 class="text-xl font-bold text-slate-800">Visitor Information</h3>
+        <h3 class="text-xl font-bold text-gray-800">Visitor Information</h3>
       </div>
       <div class="flex flex-col gap-5">
         <!-- Full Name -->
@@ -63,12 +63,12 @@
     </div>
 
     <!-- Visit Details Section -->
-    <div class="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-sm">
-      <div class="flex items-center gap-3 border-b border-slate-200/60 pb-4 mb-6">
-        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+    <div class="bg-white/50 rounded-[24px] p-8 border border-white shadow-sm">
+      <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#007AFF]">
           <mat-icon>assignment</mat-icon>
         </div>
-        <h3 class="text-xl font-bold text-slate-800">Visit Details</h3>
+        <h3 class="text-xl font-bold text-gray-800">Visit Details</h3>
       </div>
       <div class="flex flex-col gap-5">
         <!-- Purpose of Visit -->
@@ -95,7 +95,7 @@
               }
             </mat-form-field>
             @if (selectedHostDepartment()) {
-              <div class="mt-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium border border-indigo-100">
+              <div class="mt-2 bg-blue-50 text-[#007AFF] px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium border border-blue-100">
                 <mat-icon style="font-size: 16px; height: 16px; width: 16px;">business</mat-icon>
                 <span>Department: {{ selectedHostDepartment() }}</span>
               </div>
@@ -115,12 +115,12 @@
     </div>
 
     <!-- Photo Capture -->
-    <div class="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-sm">
-      <div class="flex items-center gap-3 border-b border-slate-200/60 pb-4 mb-6">
+    <div class="bg-white/50 rounded-[24px] p-8 border border-white shadow-sm">
+      <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
         <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
           <mat-icon>photo_camera</mat-icon>
         </div>
-        <h3 class="text-xl font-bold text-slate-800">Photo Capture <span class="text-rose-500 ml-1 text-base">*</span></h3>
+        <h3 class="text-xl font-bold text-gray-800">Photo Capture <span class="text-rose-500 ml-1 text-base">*</span></h3>
       </div>
       <div class="w-full md:w-3/4 lg:w-1/2 mx-auto">
         <app-photo-capture (photoCaptured)="onPhotoCaptured($event)"></app-photo-capture>
@@ -129,10 +129,10 @@
 
     <!-- Submit -->
     <div class="flex flex-col sm:flex-row justify-end gap-4 mt-4 mb-10">
-      <button mat-button type="button" class="px-8 py-6 font-medium text-slate-600 hover:bg-slate-100/80 rounded-2xl transition-colors w-full sm:w-auto" [routerLink]="['/']">
+      <button mat-button type="button" class="px-8 py-6 font-medium text-gray-600 hover:bg-gray-100/80 rounded-2xl transition-colors w-full sm:w-auto" [routerLink]="['/']">
         Cancel
       </button>
-      <button mat-flat-button class="!bg-[#0A0A0A] !text-white hover:!bg-zinc-800 disabled:!bg-slate-200 disabled:!text-slate-400 disabled:!shadow-none disabled:cursor-not-allowed px-10 py-6 text-base font-bold rounded-2xl w-full sm:w-auto shadow-sm transition-all" type="submit"
+      <button mat-flat-button class="!bg-[#007AFF] !text-white hover:!bg-blue-600 disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none disabled:cursor-not-allowed px-10 py-6 text-base font-bold rounded-2xl w-full sm:w-auto shadow-sm transition-all" type="submit"
               [disabled]="isSubmitting()">
         <mat-spinner diameter="20" class="inline-block mr-2" *ngIf="isSubmitting()"></mat-spinner>
         <span>{{ isSubmitting() ? 'Checking in...' : 'Complete Check-In' }}</span>
