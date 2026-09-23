@@ -15,19 +15,19 @@
 ## 📸 Screenshots
 
 ### Dashboard — Today's Visitors
-![Dashboard](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/01-dashboard.png)
+![Dashboard](./src/assets/screenshots/01-dashboard.png)
 
 ### Guest Detail Dialog
-![Guest Detail Dialog](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/02-guest-detail.png)
+![Guest Detail Dialog](./src/assets/screenshots/02-guest-detail.png)
 
 ### Invite Visitor Form
-![Invite Visitor](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/03-invite-visitor.png)
+![Invite Visitor](./src/assets/screenshots/03-invite-visitor.png)
 
 ### Host Approval Queue
-![Approvals](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/04-approvals.png)
+![Approvals](./src/assets/screenshots/04-approvals.png)
 
 ### Pre-Approvals List
-![Pre-Approvals](https://raw.githubusercontent.com/Aayushgarg23/Moveinsync_assignment/master/Project1_VisitorManagementSystem_AayushGarg/src/assets/screenshots/05-pre-approvals.png)
+![Pre-Approvals](./src/assets/screenshots/05-pre-approvals.png)
 
 <br>
 
