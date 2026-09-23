@@ -1,14 +1,14 @@
-<div class="flex flex-col lg:flex-row gap-6 h-[calc(100vh-220px)] md:h-[calc(100vh-130px)]">
+<div class="flex flex-col lg:flex-row gap-6 h-auto md:h-[calc(100vh-130px)]">
   
   <!-- Left: Main List Area -->
-  <div class="flex-grow lg:w-[70%] flex flex-col min-h-0 bg-[#F4F6F9]/60 rounded-3xl p-6 border border-white/40">
+  <div class="flex-grow lg:w-[70%] flex flex-col min-h-0 bg-[#F4F6F9]/60 rounded-2xl sm:rounded-3xl p-3 sm:p-6 border border-white/40">
     <div class="flex items-center justify-between mb-6 shrink-0">
       <h2 class="text-xl font-bold text-gray-900 tracking-tight">Today's Visitors</h2>
     </div>
 
-    <div class="flex-grow overflow-y-auto min-h-0 pr-2">
+    <div class="flex-grow md:overflow-y-auto min-h-0 md:pr-2">
             <!-- Table Header -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-4 px-4 py-3 mb-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200/50">
+      <div class="grid grid-cols-[1fr_auto] sm:grid-cols-3 lg:grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-2 sm:gap-4 px-2 sm:px-4 py-2 sm:py-3 mb-2 text-[11px] sm:text-[12px] font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200/50">
         <div class="flex items-center gap-1">Visitor <mat-icon style="font-size: 14px; width: 14px; height: 14px;">expand_more</mat-icon></div>
         <div class="hidden sm:block">Type of Invite</div>
         <div class="hidden lg:block">Entry Time</div>
@@ -19,13 +19,13 @@
       <!-- Rows -->
       <div class="flex flex-col gap-2">
         @for (visitor of filteredVisitors(); track visitor.id) {
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-4 items-center px-4 py-3 bg-white rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.02)] cursor-pointer hover:shadow-md hover:-translate-y-[1px] transition-all duration-200 border border-gray-100"
+          <div class="grid grid-cols-[1fr_auto] sm:grid-cols-3 lg:grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-2 sm:gap-4 items-center px-3 sm:px-4 py-3 bg-white rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.02)] cursor-pointer hover:shadow-md hover:-translate-y-[1px] transition-all duration-200 border border-gray-100"
                [class.ring-2]="selectedVisitor()?.id === visitor.id"
                [class.ring-blue-500]="selectedVisitor()?.id === visitor.id"
                (click)="openGuestDetail(visitor)">
             
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
-              <img [src]="visitor.photoUrl || 'assets/placeholder.png'" class="w-8 h-8 rounded-full object-cover bg-gray-100 border border-gray-200">
+            <div class="flex items-center gap-2 sm:gap-3 w-full">
+              <img [src]="visitor.photoUrl || 'assets/placeholder.png'" class="w-8 h-8 shrink-0 rounded-full object-cover bg-gray-100 border border-gray-200">
               <div class="flex flex-col">
                 <span class="font-semibold text-[13px] text-gray-900">{{ visitor.name }}</span>
                 <span class="text-[11px] text-gray-500 flex items-center gap-1">
@@ -67,7 +67,7 @@
   </div>
 
   <!-- Right: Profile Sidebar -->
-  <div class="hidden lg:flex flex-col w-[30%] min-h-0 bg-white/70 backdrop-blur-md rounded-3xl p-6 border border-white/50 shadow-sm shrink-0">
+  <div class="hidden lg:flex flex-col w-[30%] min-h-0 bg-white/70 backdrop-blur-md rounded-2xl sm:rounded-3xl p-3 sm:p-6 border border-white/50 shadow-sm shrink-0">
     <div class="flex items-center justify-between mb-8 shrink-0 border-b border-gray-200 pb-4">
       <h2 class="text-lg font-bold text-gray-900 tracking-tight">Visitor Profile</h2>
       <div class="flex gap-2">
@@ -77,7 +77,7 @@
     </div>
 
     @if (selectedVisitor()) {
-      <div class="flex-grow overflow-y-auto min-h-0 pr-2 pb-6 space-y-6">
+      <div class="flex-grow md:overflow-y-auto min-h-0 md:pr-2 pb-6 space-y-6">
         
                 <!-- Profile Header -->
         <div class="flex items-center gap-4">
