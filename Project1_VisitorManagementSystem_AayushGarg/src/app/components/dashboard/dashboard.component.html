@@ -1,4 +1,4 @@
-﻿<div class="flex flex-col lg:flex-row gap-6 h-[calc(100vh-130px)]">
+<div class="flex flex-col lg:flex-row gap-6 h-[calc(100vh-130px)]">
   
   <!-- Left: Main List Area -->
   <div class="flex-grow lg:w-[70%] flex flex-col min-h-0 bg-[#F4F6F9]/60 rounded-3xl p-6 border border-white/40">
@@ -7,46 +7,50 @@
     </div>
 
     <div class="flex-grow overflow-y-auto min-h-0 pr-2">
-      <!-- Table Header -->
-      <div class="grid grid-cols-[3fr_2fr_2fr_2fr_2fr_2fr] gap-4 px-4 py-3 mb-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200/50">
-        <div class="flex items-center gap-1">Name <mat-icon style="font-size: 14px; width: 14px; height: 14px;">expand_more</mat-icon></div>
-        <div>Company</div>
-        <div>Visit Type</div>
-        <div>Check-In Time</div>
-        <div>Host</div>
+            <!-- Table Header -->
+      <div class="grid grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-4 px-4 py-3 mb-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200/50">
+        <div class="flex items-center gap-1">Visitor <mat-icon style="font-size: 14px; width: 14px; height: 14px;">expand_more</mat-icon></div>
+        <div>Type of Invite</div>
+        <div>Entry Time</div>
+        <div>Exit Time</div>
         <div>Status</div>
       </div>
 
       <!-- Rows -->
       <div class="flex flex-col gap-2">
         @for (visitor of filteredVisitors(); track visitor.id) {
-          <div class="grid grid-cols-[3fr_2fr_2fr_2fr_2fr_2fr] gap-4 items-center px-4 py-3 bg-white rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.02)] cursor-pointer hover:shadow-md hover:-translate-y-[1px] transition-all duration-200 border border-gray-100"
+          <div class="grid grid-cols-[4fr_3fr_3fr_3fr_3fr] gap-4 items-center px-4 py-3 bg-white rounded-xl shadow-[0_2px_8px_rgb(0,0,0,0.02)] cursor-pointer hover:shadow-md hover:-translate-y-[1px] transition-all duration-200 border border-gray-100"
                [class.ring-2]="selectedVisitor()?.id === visitor.id"
                [class.ring-blue-500]="selectedVisitor()?.id === visitor.id"
                (click)="openGuestDetail(visitor)">
             
             <div class="flex items-center gap-3">
               <img [src]="visitor.photoUrl || 'assets/placeholder.png'" class="w-8 h-8 rounded-full object-cover bg-gray-100 border border-gray-200">
-              <span class="font-semibold text-[13px] text-gray-900">{{ visitor.name }}</span>
+              <div class="flex flex-col">
+                <span class="font-semibold text-[13px] text-gray-900">{{ visitor.name }}</span>
+                <span class="text-[11px] text-gray-500 flex items-center gap-1">
+                  <mat-icon style="font-size: 10px; width: 10px; height: 10px;">person</mat-icon>
+                  Host: {{ visitor.host?.name || 'Unknown' }}
+                </span>
+              </div>
             </div>
-            
-            <div class="text-[13px] text-gray-600 truncate">{{ visitor.companyName || 'N/A' }}</div>
             
             <div class="text-[13px] text-gray-600">{{ visitor.visitType }}</div>
             
-            <div class="text-[13px] text-gray-600">{{ (visitor.checkInTime | date:'hh:mm a') || '-' }}</div>
+            <div class="text-[13px] text-gray-600">{{ (visitor.checkInTime | date:'h:mm a') || '-' }}</div>
             
-            <div class="text-[13px] text-gray-600 truncate">{{ visitor.host?.name || 'Unknown' }}</div>
+            <div class="text-[13px] text-gray-600">{{ (visitor.checkOutTime | date:'h:mm a') || '-' }}</div>
             
             <div class="flex items-center">
               <span class="inline-flex items-center px-3 py-1 text-[11px] font-semibold rounded-full w-fit"
                     [ngClass]="{
                       'bg-emerald-100 text-emerald-700': visitor.status === 'CHECKED_IN',
-                      'bg-amber-100 text-amber-700': visitor.status === 'PRE_APPROVED',
-                      'bg-rose-100 text-rose-700': visitor.status === 'OVERSTAY',
-                      'bg-indigo-100 text-indigo-700': visitor.status === 'CHECKED_OUT'
+                      'bg-amber-100 text-amber-700': visitor.status === 'PRE_APPROVED' || visitor.status === 'PENDING_APPROVAL',
+                      'bg-rose-100 text-rose-700': visitor.status === 'OVERSTAY' || visitor.status === 'DENIED',
+                      'bg-indigo-100 text-indigo-700': visitor.status === 'CHECKED_OUT' || visitor.status === 'SELF_CHECK_OUT',
+                      'bg-gray-100 text-gray-700': visitor.status === 'CANCELLED' || visitor.status === 'EXPIRED'
                     }">
-                {{ visitor.status === 'PRE_APPROVED' ? 'Expected' : visitor.status === 'CHECKED_IN' ? 'Checked in' : visitor.status === 'CHECKED_OUT' ? 'Checked out' : visitor.status }}
+                {{ visitor.status | visitorStatus }}
               </span>
             </div>
 
@@ -75,12 +79,24 @@
     @if (selectedVisitor()) {
       <div class="flex-grow overflow-y-auto min-h-0 pr-2 pb-6 space-y-6">
         
-        <!-- Profile Header -->
+                <!-- Profile Header -->
         <div class="flex items-center gap-4">
            <img [src]="selectedVisitor()?.photoUrl || 'assets/placeholder.png'" class="w-14 h-14 rounded-full object-cover shadow-sm border border-gray-100 bg-gray-50">
-           <div>
-             <h3 class="text-base font-bold text-gray-900 leading-tight mb-0.5">{{ selectedVisitor()?.name }}</h3>
-             <p class="text-sm text-gray-500 font-medium">{{ selectedVisitor()?.purpose }} Designer, {{ selectedVisitor()?.companyName || 'N/A' }}</p>
+           <div class="flex flex-col gap-1">
+             <div class="flex items-center gap-2">
+               <h3 class="text-base font-bold text-gray-900 leading-tight mb-0">{{ selectedVisitor()?.name }}</h3>
+               <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-md w-fit uppercase tracking-wider"
+                    [ngClass]="{
+                      'bg-emerald-100 text-emerald-700': selectedVisitor()?.status === 'CHECKED_IN',
+                      'bg-amber-100 text-amber-700': selectedVisitor()?.status === 'PRE_APPROVED' || selectedVisitor()?.status === 'PENDING_APPROVAL',
+                      'bg-rose-100 text-rose-700': selectedVisitor()?.status === 'OVERSTAY' || selectedVisitor()?.status === 'DENIED',
+                      'bg-indigo-100 text-indigo-700': selectedVisitor()?.status === 'CHECKED_OUT' || selectedVisitor()?.status === 'SELF_CHECK_OUT',
+                      'bg-gray-100 text-gray-700': selectedVisitor()?.status === 'CANCELLED' || selectedVisitor()?.status === 'EXPIRED'
+                    }">
+                {{ selectedVisitor()?.status | visitorStatus }}
+              </span>
+             </div>
+             <p class="text-sm text-gray-500 font-medium">{{ selectedVisitor()?.visitType }}, {{ selectedVisitor()?.companyName || 'N/A' }}</p>
            </div>
         </div>
 
