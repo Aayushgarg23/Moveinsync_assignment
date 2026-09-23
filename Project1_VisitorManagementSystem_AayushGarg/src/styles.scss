@@ -4,45 +4,37 @@
 
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-/* You can add global styles to this file, and also import other style files */
-
 html, body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  background-color: #F3F4F6 !important; 
 }
 
 /* Custom Responsive Overrides */
-.responsive-dialog .mat-mdc-dialog-container {
-  padding: 0 !important;
-}
-
+.responsive-dialog .mat-mdc-dialog-container { padding: 0 !important; }
 @media (max-width: 599px) {
-  .responsive-dialog {
-    max-width: 95vw !important;
-    width: 95vw !important;
-  }
+  .responsive-dialog { max-width: 95vw !important; width: 95vw !important; }
 }
 
-/* Modern Apple-style Overrides */
-body { 
-  background-color: #F5F5F7 !important; 
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-}
+/* Apple Style Form Fields - HIGH CONTRAST */
 .mat-mdc-text-field-wrapper { 
   background-color: #FFFFFF !important; 
   border-radius: 12px !important; 
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important; 
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important; 
 }
-.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing { 
-  border-color: rgba(0,0,0,0.05) !important; 
+.mdc-notched-outline__leading, 
+.mdc-notched-outline__notch, 
+.mdc-notched-outline__trailing { 
+  border-color: #D1D5DB !important; /* Visible gray border */
   border-width: 1px !important; 
 }
-.mdc-text-field--focused .mdc-notched-outline__leading, .mdc-text-field--focused .mdc-notched-outline__notch, .mdc-text-field--focused .mdc-notched-outline__trailing { 
+.mdc-text-field--focused .mdc-notched-outline__leading, 
+.mdc-text-field--focused .mdc-notched-outline__notch, 
+.mdc-text-field--focused .mdc-notched-outline__trailing { 
   border-color: #007AFF !important; 
   border-width: 2px !important; 
 }
 .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-flat-button, .mat-mdc-stroked-button {
   border-radius: 9999px !important;
 }
-
